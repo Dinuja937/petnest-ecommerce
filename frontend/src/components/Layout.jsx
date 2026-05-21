@@ -46,12 +46,20 @@ const Layout = () => {
                 </button>
               </>
             ) : (
-              <Link
-                to="/login"
-                className="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-lg font-medium transition-colors"
-              >
-                Login
-              </Link>
+                <>
+                  <Link
+                    to="/login"
+                    className="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-lg font-medium transition-colors"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="bg-gray-200 text-gray-800 hover:bg-gray-300 px-4 py-2 rounded-lg font-medium transition-colors"
+                  >
+                    Register
+                  </Link>
+                </>
             )}
           </nav>
         </div>
