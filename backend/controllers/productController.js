@@ -38,7 +38,8 @@ export const getProductById = async (req, res) => {
 // @access  Private/Admin
 export const createProduct = async (req, res) => {
   try {
-    const { name, price, description, category, stock, image } = req.body;
+    const { name, price, description, category, stock } = req.body;
+    const image = req.file ? req.file.path : req.body.image;
 
     const product = new Product({
       name,
@@ -61,7 +62,8 @@ export const createProduct = async (req, res) => {
 // @access  Private/Admin
 export const updateProduct = async (req, res) => {
   try {
-    const { name, price, description, category, stock, image } = req.body;
+    const { name, price, description, category, stock } = req.body;
+    const image = req.file ? req.file.path : req.body.image;
 
     const product = await Product.findById(req.params.id);
 
