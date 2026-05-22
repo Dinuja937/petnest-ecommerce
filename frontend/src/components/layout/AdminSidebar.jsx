@@ -35,10 +35,11 @@ const AdminSidebar = () => {
       >
         <Menu className="w-6 h-6" />
       </button>
-      {/* Sidebar */}
+      {/* Fixed Sidebar */}
       <aside
-        className={`bg-blue-950 text-blue-50 w-64 flex flex-col p-6 shadow-xl transform md:transform-none transition-transform duration-200 $
-          ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
+        className={`bg-blue-950 text-blue-50 w-64 flex flex-col p-6 shadow-xl transform transition-transform duration-200 ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        } md:translate-x-0`}
       >
         <h1 className="text-2xl font-bold mb-8 text-center">Admin Panel</h1>
         <nav className="flex flex-col space-y-2 flex-1">

@@ -8,6 +8,10 @@ import Home from './pages/Home';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminLayout from './components/layout/AdminLayout';
+import UserManagement from './pages/UserManagement';
+import ProductManagement from './pages/ProductManagement';
+import OrderManagement from './pages/OrderManagement';
 import ProductList from './pages/ProductList';
 import ProductDetails from './pages/ProductDetails';
 
@@ -15,6 +19,7 @@ function App() {
   return (
     <Router>
       <Routes>
+        {/* Public Layout with NavBar/Footer */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="login" element={<Login />} />
@@ -29,10 +34,16 @@ function App() {
             <Route path="checkout" element={<Checkout />} />
             <Route path="profile" element={<Profile />} />
           </Route>
+        </Route>
 
-          {/* Admin Routes */}
-          <Route element={<ProtectedRoute adminOnly={true} />}>
-            <Route path="admin" element={<AdminDashboard />} />
+        {/* Admin Routes without public Layout */}
+        <Route element={<ProtectedRoute adminOnly={true} />}>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="users" element={<UserManagement />} />
+            <Route path="products" element={<ProductManagement />} />
+            <Route path="orders" element={<OrderManagement />} />
           </Route>
         </Route>
       </Routes>
