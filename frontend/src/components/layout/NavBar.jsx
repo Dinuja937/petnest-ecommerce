@@ -54,9 +54,6 @@ const NavBar = () => {
                 <Link to="/category/birds" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">
                   Birds
                 </Link>
-                <Link to="/category/fish" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">
-                  Fish
-                </Link>
               </div>
             )}
           </div>

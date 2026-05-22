@@ -4,9 +4,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
+import Home from './pages/Home';
 
 // Placeholder Pages
-const Home = () => <div>Home Page</div>;
 const ProductDetails = () => <div>Product Details</div>;
 const Cart = () => <div>Cart Page</div>;
 const Checkout = () => <div>Checkout Page</div>;
