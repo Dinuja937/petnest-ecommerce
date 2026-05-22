@@ -33,7 +33,6 @@ const ProductList = () => {
     fetchProducts();
   }, []);
 
-  // Filter products based on active category (from URL) and search query
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
       !urlCategory ||
@@ -84,11 +83,10 @@ const ProductList = () => {
             <button
               key={cat}
               onClick={() => handleCategorySelect(cat)}
-              className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer ${
-                activeCategory === cat
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-200 scale-105'
-                  : 'bg-gray-50 text-gray-600 hover:bg-blue-50 hover:text-blue-600'
-              }`}
+              className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer ${activeCategory === cat
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-200 scale-105'
+                : 'bg-gray-50 text-gray-600 hover:bg-blue-50 hover:text-blue-600'
+                }`}
             >
               {cat}
             </button>
