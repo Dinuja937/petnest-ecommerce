@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import AdminDashboard from './pages/AdminDashboard';
+import ProductList from './pages/ProductList';
 
 const ProductDetails = () => <div>Product Details</div>;
 
@@ -19,6 +20,8 @@ function App() {
           <Route index element={<Home />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="shop" element={<ProductList />} />
+          <Route path="category/:category" element={<ProductList />} />
           <Route path="product/:id" element={<ProductDetails />} />
 
           {/* Protected Routes */}
