@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../store/slices/authSlice';
 import api from '../services/api';
 import NavBar from './layout/NavBar';
+import Footer from './layout/Footer';
 
 const Layout = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -29,11 +30,7 @@ const Layout = () => {
         <Outlet />
       </main>
 
-      <footer className="bg-blue-950 text-blue-50 py-8">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <p>&copy; {new Date().getFullYear()} PetNest. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
