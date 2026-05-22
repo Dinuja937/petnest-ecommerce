@@ -9,8 +9,7 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import AdminDashboard from './pages/AdminDashboard';
 import ProductList from './pages/ProductList';
-
-const ProductDetails = () => <div>Product Details</div>;
+import ProductDetails from './pages/ProductDetails';
 
 function App() {
   return (
