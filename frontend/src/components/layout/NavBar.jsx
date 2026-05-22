@@ -2,11 +2,13 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../store/slices/authSlice';
 import api from '../../services/api';
+import toast from 'react-hot-toast';
 import { ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
 
 const NavBar = () => {
   const { userInfo } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [categoryOpen, setCategoryOpen] = useState(false);
@@ -15,9 +17,11 @@ const NavBar = () => {
     try {
       await api.post('/auth/logout');
       dispatch(logout());
+      toast.success('Logged out successfully');
       navigate('/login');
     } catch (error) {
       console.error(error);
+      toast.error('Logout failed');
     }
   };
 
@@ -60,10 +64,11 @@ const NavBar = () => {
           {/* Cart icon */}
           <Link to="/cart" className="relative text-gray-600 hover:text-blue-600 transition-colors">
             <ShoppingCart className="w-5 h-5" />
-            {/* Badge placeholder */}
-            <span className="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-blue-600 rounded-full">
-              0
-            </span>
+            {cartItems.length > 0 && (
+              <span className="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-blue-600 rounded-full animate-pulse">
+                {cartItems.reduce((acc, item) => acc + (item.qty || 1), 0)}
+              </span>
+            )}
           </Link>
           {/* Auth section */}
           {userInfo ? (

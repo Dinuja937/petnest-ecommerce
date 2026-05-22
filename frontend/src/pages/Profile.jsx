@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
@@ -8,8 +8,8 @@ const Profile = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-  const [orders, setOrders] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchOrders = async () => {

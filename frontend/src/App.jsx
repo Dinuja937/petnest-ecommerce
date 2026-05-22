@@ -5,13 +5,11 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
 import Home from './pages/Home';
+import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
+import AdminDashboard from './pages/AdminDashboard';
 
-// Placeholder Pages
 const ProductDetails = () => <div>Product Details</div>;
-const Cart = () => <div>Cart Page</div>;
-const Checkout = () => <div>Checkout Page</div>;
-// Profile component will be imported above
-const AdminDashboard = () => <div>Admin Dashboard</div>;
 
 function App() {
   return (
@@ -22,15 +20,15 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="product/:id" element={<ProductDetails />} />
-          <Route path="cart" element={<Cart />} />
 
-          {/* Protected Routes (Placeholders) */}
+          {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
+            <Route path="cart" element={<Cart />} />
             <Route path="checkout" element={<Checkout />} />
             <Route path="profile" element={<Profile />} />
           </Route>
 
-          {/* Admin Routes (Placeholders) */}
+          {/* Admin Routes */}
           <Route element={<ProtectedRoute adminOnly={true} />}>
             <Route path="admin" element={<AdminDashboard />} />
           </Route>
