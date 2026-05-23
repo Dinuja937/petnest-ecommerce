@@ -18,10 +18,12 @@ const NavBar = () => {
       await api.post('/auth/logout');
       dispatch(logout());
       toast.success('Logged out successfully');
-      navigate('/login');
+      navigate('/');
     } catch (error) {
       console.error(error);
-      toast.error('Logout failed');
+      dispatch(logout());
+      toast.success('Logged out successfully');
+      navigate('/');
     }
   };
 

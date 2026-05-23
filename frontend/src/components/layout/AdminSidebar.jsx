@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Box, ShoppingCart, Users, LogOut, User, Menu } from 'lucide-react';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../store/slices/authSlice';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
 
 const AdminSidebar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => setIsOpen(!isOpen);
@@ -13,16 +16,19 @@ const AdminSidebar = () => {
   const logoutHandler = async () => {
     try {
       await api.post('/auth/logout');
+      dispatch(logout());
       toast.success('Logged out');
-      navigate('/login');
+      navigate('/', { replace: true });
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Logout failed');
+      // Even if API fails, still logout locally and redirect
+      dispatch(logout());
+      toast.success('Logged out');
+      navigate('/', { replace: true });
     }
   };
 
   const linkClasses = ({ isActive }) =>
-    `flex items-center gap-3 px-4 py-2 rounded transition-colors ${
-      isActive ? 'bg-blue-800 text-white' : 'text-blue-200 hover:bg-blue-800 hover:text-white'
+    `flex items-center gap-3 px-4 py-2 rounded transition-colors ${isActive ? 'bg-blue-800 text-white' : 'text-blue-200 hover:bg-blue-800 hover:text-white'
     }`;
 
   return (
@@ -37,9 +43,8 @@ const AdminSidebar = () => {
       </button>
       {/* Fixed Sidebar */}
       <aside
-        className={`bg-blue-950 text-blue-50 w-64 flex flex-col p-6 shadow-xl transform transition-transform duration-200 ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        } md:translate-x-0`}
+        className={`bg-blue-950 text-blue-50 w-64 flex flex-col p-6 shadow-xl transform transition-transform duration-200 ${isOpen ? 'translate-x-0' : '-translate-x-full'
+          } md:translate-x-0`}
       >
         <h1 className="text-2xl font-bold mb-8 text-center">Admin Panel</h1>
         <nav className="flex flex-col space-y-2 flex-1">

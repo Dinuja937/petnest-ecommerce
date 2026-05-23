@@ -18,7 +18,11 @@ const Login = () => {
 
   useEffect(() => {
     if (userInfo) {
-      navigate('/');
+      if (userInfo.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
     }
   }, [navigate, userInfo]);
 
@@ -29,7 +33,11 @@ const Login = () => {
       const { data } = await api.post('/auth/login', { email, password });
       dispatch(setCredentials(data));
       toast.success('Login successful!');
-      navigate('/');
+      if (data.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
     } catch (err) {
       const errorMsg = err.response?.data?.message || err.response?.data?.errors?.[0]?.msg || 'Failed to log in';
       toast.error(errorMsg);
