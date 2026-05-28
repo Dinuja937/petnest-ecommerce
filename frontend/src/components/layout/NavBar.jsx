@@ -42,6 +42,9 @@ const NavBar = () => {
           <NavLink to="/shop" className={linkClass}>
             Shop
           </NavLink>
+          <NavLink to="/contact" className={linkClass}>
+            Contact
+          </NavLink>
           {/* Cart icon */}
           <Link to="/cart" className="relative text-gray-600 hover:text-blue-600 transition-colors">
             <ShoppingCart className="w-5 h-5" />
