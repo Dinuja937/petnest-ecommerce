@@ -4,14 +4,11 @@ import { logout } from '../../store/slices/authSlice';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
 import { ShoppingCart } from 'lucide-react';
-import { useState } from 'react';
-
 const NavBar = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [categoryOpen, setCategoryOpen] = useState(false);
 
   const logoutHandler = async () => {
     try {
@@ -39,30 +36,12 @@ const NavBar = () => {
           <NavLink to="/" className={linkClass} end>
             Home
           </NavLink>
+          <NavLink to="/about" className={linkClass}>
+            About Us
+          </NavLink>
           <NavLink to="/shop" className={linkClass}>
             Shop
           </NavLink>
-          {/* Category dropdown */}
-          <div
-            className="relative"
-            onMouseEnter={() => setCategoryOpen(true)}
-            onMouseLeave={() => setCategoryOpen(false)}
-          >
-            <button className={`${linkClass} flex items-center`}>Categories</button>
-            {categoryOpen && (
-              <div className="absolute left-0 mt-2 w-40 bg-white shadow-lg rounded-md py-2">
-                <Link to="/category/dogs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">
-                  Dogs
-                </Link>
-                <Link to="/category/cats" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">
-                  Cats
-                </Link>
-                <Link to="/category/birds" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50">
-                  Birds
-                </Link>
-              </div>
-            )}
-          </div>
           {/* Cart icon */}
           <Link to="/cart" className="relative text-gray-600 hover:text-blue-600 transition-colors">
             <ShoppingCart className="w-5 h-5" />

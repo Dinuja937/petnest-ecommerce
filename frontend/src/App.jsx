@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
 import Home from './pages/Home';
+import About from './pages/About';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import AdminDashboard from './pages/AdminDashboard';
@@ -19,9 +20,10 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Public Layout with NavBar/Footer */}
-        <Route path="/" element={<Layout />}>
+          {/* Public Layout with NavBar/Footer */}
+          <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
+          <Route path="about" element={<About />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="shop" element={<ProductList />} />

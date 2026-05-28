@@ -7,7 +7,6 @@ const ProductCard = ({ product }) => {
 
   const isOutOfStock = stock === 0;
 
-  // Curated category colors for pet shop theme
   const getCategoryColor = (cat) => {
     switch (cat?.toLowerCase()) {
       case 'dogs':

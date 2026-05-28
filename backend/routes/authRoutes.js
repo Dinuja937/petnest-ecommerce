@@ -28,3 +28,4 @@ router.route('/users/:id')
     .delete(protect, admin, deleteUser);
 
 export default router;
+
