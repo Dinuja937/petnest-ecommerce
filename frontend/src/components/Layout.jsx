@@ -28,11 +28,11 @@ const Layout = () => {
   const isAdminRoute = pathname.startsWith('/admin');
 
   return (
-    <div className="flex flex-col min-h-screen bg-blue-50/50">
+    <div className="flex flex-col min-h-screen min-w-0 overflow-x-hidden bg-blue-50/50">
       <Toaster position="top-right" />
       {!isAdminRoute && <NavBar />}
 
-      <main className={`flex-grow w-full ${isHome ? '' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'}`}>
+      <main className={`flex-grow w-full min-w-0 ${isHome ? '' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'}`}>
         <Outlet />
       </main>
 

@@ -27,12 +27,12 @@ const NavBar = () => {
   const linkClass = 'text-gray-600 hover:text-blue-600 font-medium transition-colors';
 
   return (
-    <header className="bg-white shadow-md sticky top-0 z-50 border-b border-blue-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <Link to="/" className="text-2xl font-bold text-blue-900 tracking-tight">
+    <header className="bg-white shadow-md sticky top-0 z-50 border-b border-blue-100 overflow-x-clip">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between min-w-0">
+        <Link to="/" className="text-2xl font-bold text-blue-900 tracking-tight shrink-0">
           PetNest
         </Link>
-        <nav className="flex gap-4 items-center">
+        <nav className="flex gap-4 items-center min-w-0 overflow-x-auto">
           <NavLink to="/" className={linkClass} end>
             Home
           </NavLink>
