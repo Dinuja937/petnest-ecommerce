@@ -52,7 +52,7 @@ const productGroups = [
 
 const About = () => {
   return (
-    <main className="w-full min-h-screen bg-gradient-to-b from-blue-50/40 via-white to-white py-12 sm:py-16">
+    <main className="w-full min-h-screen bg-linear-to-b from-blue-50/40 via-white to-white py-12 sm:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <section className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-14 items-center mb-16">
           <div className="space-y-6">
@@ -92,13 +92,13 @@ const About = () => {
             </div>
           </div>
 
-          <div className="relative rounded-2xl overflow-hidden shadow-xl border border-blue-100 bg-blue-950 min-h-[430px]">
+          <div className="relative rounded-2xl overflow-hidden shadow-xl border border-blue-100 bg-blue-950 min-h-107.5">
             <img
               src={bannerImage}
               alt="Happy pets with PetNest supplies"
               className="absolute inset-0 w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-blue-950 via-blue-950/70 to-blue-950/10" />
+            <div className="absolute inset-0 bg-linear-to-t from-blue-950 via-blue-950/70 to-blue-950/10" />
 
             <div className="relative z-10 p-7 sm:p-9 text-white max-w-md">
               <div className="w-14 h-14 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center text-blue-100 mb-6">

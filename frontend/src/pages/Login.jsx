@@ -30,7 +30,7 @@ const Login = () => {
     e.preventDefault();
     try {
       setIsLoading(true);
-      const { data } = await api.post('/auth/login', { email, password });
+      const { data } = await api.post('/auth/login', { email: email.trim(), password });
       dispatch(setCredentials(data));
       toast.success('Login successful!');
       if (data.role === 'admin') {
