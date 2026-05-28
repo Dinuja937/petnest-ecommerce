@@ -39,7 +39,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-b from-blue-50/20 via-white to-blue-50/10 py-12">
+    <div className="w-full min-h-screen bg-linear-to-b from-blue-50/20 via-white to-blue-50/10 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <section className="text-center max-w-3xl mx-auto space-y-6 mb-16 animate-fade-in-up">
@@ -49,7 +49,7 @@ const Contact = () => {
           </span>
           <h1 className="text-4xl sm:text-5xl font-extrabold text-blue-950 tracking-tight leading-tight">
             Contact{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-blue-800">
               PetNest
             </span>
           </h1>

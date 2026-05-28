@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MapPin, Phone, Mail } from 'lucide-react';
+import { MailCheck, MapPinned, PhoneCall, ShieldCheck } from 'lucide-react';
 
 const FacebookIcon = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" {...props}>
@@ -13,49 +13,47 @@ const InstagramIcon = (props) => (
     </svg>
 );
 
-const XTwitterIcon = (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" {...props}>
-        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-    </svg>
-);
-
 const Footer = () => {
     const quickLinks = [
         { name: 'Home', path: '/' },
+        { name: 'About Us', path: '/about' },
         { name: 'Shop', path: '/shop' },
-        { name: 'Categories', path: '/categories' },
+        { name: 'Contact', path: '/contact' },
         { name: 'Cart', path: '/cart' },
-        { name: 'FAQs', path: '/faqs' },
-        { name: 'Privacy Policy', path: '/privacy-policy' },
+        { name: 'Login', path: '/login' },
     ];
 
     const contactInfo = [
-        { icon: MapPin, text: 'Colombo, Sri Lanka' },
-        { icon: Phone, text: '+94 77 123 4567' },
-        { icon: Mail, text: 'support@petnest.lk', href: 'mailto:support@petnest.lk' },
+        { icon: PhoneCall, text: '+94 77 123 4567', href: 'tel:+94771234567' },
+        { icon: MailCheck, text: 'support@petnest.lk', href: 'mailto:support@petnest.lk' },
+        { icon: MapPinned, text: 'Colombo, Sri Lanka' },
     ];
+
+    const supportPoints = ['Customer care: Mon-Sat, 9:00 AM - 6:00 PM', 'Order, delivery, and product support'];
 
     const socialLinks = [
         { icon: FacebookIcon, href: '#', label: 'Facebook' },
         { icon: InstagramIcon, href: '#', label: 'Instagram' },
-        { icon: XTwitterIcon, href: '#', label: 'Twitter / X' },
     ];
 
     return (
         <footer className="bg-blue-950 text-blue-50 border-t border-blue-900">
-            {/* Main footer content */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-                    {/* Brand / About */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.25fr_0.8fr_1fr_0.8fr] gap-10">
                     <div>
-                        <h2 className="text-2xl font-bold tracking-tight mb-4">PetNest</h2>
-                        <p className="text-blue-200 text-sm leading-relaxed">
-                            Your trusted online pet store for food, toys, accessories, and pet
-                            care essentials.
+                        <Link to="/" className="inline-block text-2xl font-bold tracking-tight mb-4">
+                            PetNest
+                        </Link>
+                        <p className="text-blue-200 text-sm leading-relaxed max-w-sm">
+                            Sri Lanka&apos;s friendly online pet store for food, treats, toys,
+                            grooming essentials, accessories, and everyday pet care.
                         </p>
+                        <div className="mt-5 inline-flex items-center gap-2 rounded-xl bg-blue-900/70 border border-blue-800 px-4 py-3 text-sm text-blue-100">
+                            <ShieldCheck className="w-4 h-4 text-blue-300 shrink-0" />
+                            Trusted supplies for happier pets
+                        </div>
                     </div>
 
-                    {/* Quick Links */}
                     <div>
                         <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
                         <ul className="space-y-2">
@@ -63,7 +61,7 @@ const Footer = () => {
                                 <li key={link.name}>
                                     <Link
                                         to={link.path}
-                                        className="text-blue-200 hover:text-blue-50 text-sm transition-colors duration-300"
+                                        className="text-blue-200 hover:text-white text-sm transition-colors duration-300"
                                     >
                                         {link.name}
                                     </Link>
@@ -72,9 +70,8 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    {/* Contact Information */}
                     <div>
-                        <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
+                        <h3 className="text-lg font-semibold mb-4">Contact</h3>
                         <ul className="space-y-3">
                             {contactInfo.map((item) => (
                                 <li key={item.text} className="flex items-start gap-3">
@@ -82,7 +79,7 @@ const Footer = () => {
                                     {item.href ? (
                                         <a
                                             href={item.href}
-                                            className="text-blue-200 hover:text-blue-50 text-sm transition-colors duration-300"
+                                            className="text-blue-200 hover:text-white text-sm transition-colors duration-300"
                                         >
                                             {item.text}
                                         </a>
@@ -92,28 +89,37 @@ const Footer = () => {
                                 </li>
                             ))}
                         </ul>
+
+                        <ul className="mt-5 space-y-2">
+                            {supportPoints.map((point) => (
+                                <li key={point} className="text-blue-300 text-xs leading-relaxed">
+                                    {point}
+                                </li>
+                            ))}
+                        </ul>
                     </div>
 
-                    {/* Social Media */}
                     <div>
                         <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
-                        <div className="flex gap-4">
+                        <div className="flex gap-3">
                             {socialLinks.map((social) => (
                                 <a
                                     key={social.label}
                                     href={social.href}
                                     aria-label={social.label}
-                                    className="w-10 h-10 rounded-full bg-blue-900 flex items-center justify-center text-blue-200 hover:text-white hover:bg-blue-700 hover:scale-110 transition-all duration-300"
+                                    className="w-10 h-10 rounded-xl bg-blue-900 flex items-center justify-center text-blue-200 hover:text-white hover:bg-blue-700 hover:scale-105 transition-all duration-300"
                                 >
                                     <social.icon className="w-5 h-5" />
                                 </a>
                             ))}
                         </div>
+                        <p className="mt-5 text-blue-300 text-xs leading-relaxed">
+                            Follow PetNest for product updates, care tips, and pet-parent offers.
+                        </p>
                     </div>
                 </div>
             </div>
 
-            {/* Bottom bar */}
             <div className="border-t border-blue-900">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
                     <p className="text-center text-blue-300 text-sm">

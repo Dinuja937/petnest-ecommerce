@@ -58,7 +58,7 @@ const ProductList = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 min-h-screen">
       {/* Banner / Header */}
-      <div className="bg-gradient-to-r from-blue-900 to-indigo-950 rounded-3xl p-8 md:p-12 text-white mb-8 shadow-xl relative overflow-hidden">
+      <div className="bg-linear-to-r from-blue-900 to-indigo-950 rounded-3xl p-8 md:p-12 text-white mb-8 shadow-xl relative overflow-hidden">
         <div className="absolute right-0 bottom-0 top-0 opacity-10 flex items-center justify-center pointer-events-none">
           <ShoppingBag size={300} />
         </div>

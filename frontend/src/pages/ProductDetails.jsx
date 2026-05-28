@@ -106,7 +106,7 @@ const ProductDetails = () => {
             <img
               src={product.image || 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=600'}
               alt={product.name}
-              className="w-full h-auto max-h-[500px] object-cover rounded-xl shadow-md hover:scale-102 transition-transform duration-300"
+              className="w-full h-auto max-h-125 object-cover rounded-xl shadow-md hover:scale-102 transition-transform duration-300"
             />
           </div>
 
