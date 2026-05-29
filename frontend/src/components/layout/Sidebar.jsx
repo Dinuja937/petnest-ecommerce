@@ -22,7 +22,7 @@ const AdminSidebar = () => {
 
   const linkClasses = ({ isActive }) =>
     `flex items-center gap-3 px-4 py-2 rounded transition-colors ${
-      isActive ? 'bg-blue-800 text-white' : 'text-blue-200 hover:bg-blue-800 hover:text-white'
+      isActive ? 'bg-blue-800 text-white font-semibold' : 'text-blue-200 hover:bg-blue-900 hover:text-white'
     }`;
 
   return (
