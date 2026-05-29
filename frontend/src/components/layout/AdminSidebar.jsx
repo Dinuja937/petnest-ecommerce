@@ -60,12 +60,9 @@ const AdminSidebar = () => {
           <NavLink to="/admin/orders" className={linkClasses}>
             <ShoppingCart className="w-5 h-5" /> Order Management
           </NavLink>
-          <button
-            onClick={() => navigate('/profile')}
-            className={linkClasses({ isActive: false })}
-          >
+          <NavLink to="/admin/profile" className={linkClasses}>
             <User className="w-5 h-5" /> Edit Profile
-          </button>
+          </NavLink>
         </nav>
         <button
           onClick={logoutHandler}
