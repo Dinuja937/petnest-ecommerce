@@ -2,9 +2,6 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '/api',
-  headers: {
-    'Content-Type': 'application/json',
-  },
   withCredentials: true,
 });
 
@@ -16,6 +13,16 @@ api.interceptors.request.use(
     if (userInfo && userInfo.token) {
       config.headers.Authorization = `Bearer ${userInfo.token}`;
     }
+
+    if (typeof FormData !== 'undefined' && config.data instanceof FormData) {
+      if (typeof config.headers?.delete === 'function') {
+        config.headers.delete('Content-Type');
+      } else if (config.headers) {
+        delete config.headers['Content-Type'];
+        delete config.headers['content-type'];
+      }
+    }
+
     return config;
   },
   (error) => {
