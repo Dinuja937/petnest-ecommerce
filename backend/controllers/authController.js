@@ -129,6 +129,10 @@ export const getUsers = async (req, res) => {
 // @access  Private/Admin
 export const deleteUser = async (req, res) => {
   try {
+    if (req.params.id === req.user._id.toString()) {
+      return res.status(400).json({ message: 'You cannot delete your own admin account' });
+    }
+
     const user = await User.findById(req.params.id);
     if (user) {
       await user.deleteOne();
@@ -164,15 +168,39 @@ export const updateUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (user) {
-      user.name = req.body.name || user.name;
-      user.email = req.body.email || user.email;
-      user.role = req.body.role || user.role;
-      const updatedUser = await user.save();
+      const updatedEmail = req.body.email?.trim().toLowerCase();
+
+      if (updatedEmail && updatedEmail !== user.email) {
+        const emailExists = await User.findOne({ email: updatedEmail });
+
+        if (emailExists) {
+          return res.status(400).json({ message: 'Email is already in use' });
+        }
+      }
+
+      const nextRole = req.body.role || user.role;
+
+      if (!['user', 'admin'].includes(nextRole)) {
+        return res.status(400).json({ message: 'Invalid user role' });
+      }
+
+      const updatedUser = await User.findByIdAndUpdate(
+        req.params.id,
+        {
+          name: req.body.name?.trim() || user.name,
+          email: updatedEmail || user.email,
+          role: nextRole,
+        },
+        { new: true, runValidators: true }
+      ).select('-password');
+
       res.json({
         _id: updatedUser._id,
         name: updatedUser.name,
         email: updatedUser.email,
         role: updatedUser.role,
+        createdAt: updatedUser.createdAt,
+        updatedAt: updatedUser.updatedAt,
       });
     } else {
       res.status(404).json({ message: 'User not found' });
