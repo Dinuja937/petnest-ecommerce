@@ -241,14 +241,20 @@ export const forgotPassword = async (req, res) => {
 };
 
 // @desc    Reset password using token
-// @route   PUT /api/auth/reset-password/:token
+// @route   PUT /api/auth/reset-password/:token or PUT /api/auth/reset-password
 // @access  Public
 export const resetPassword = async (req, res) => {
   try {
-    // Hash the token from URL params
+    const token = req.params.token || req.body.resetToken;
+
+    if (!token) {
+      return res.status(400).json({ message: 'Reset token is required' });
+    }
+
+    // Hash the token
     const resetPasswordToken = crypto
       .createHash('sha256')
-      .update(req.params.token)
+      .update(token)
       .digest('hex');
 
     const user = await User.findOne({
@@ -267,6 +273,123 @@ export const resetPassword = async (req, res) => {
     await user.save();
 
     res.json({ message: 'Password has been reset successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Send OTP to email for password reset
+// @route   POST /api/auth/send-otp
+// @access  Public
+export const sendOtp = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required' });
+    }
+
+    const user = await User.findOne({ email: email.trim() });
+
+    if (!user) {
+      return res.status(404).json({ message: 'No account found with that email address' });
+    }
+
+    // Generate a 6-digit numeric OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Set OTP and expiration (10 minutes)
+    user.resetPasswordOtp = otp;
+    user.resetPasswordOtpExpire = Date.now() + 10 * 60 * 1000;
+    await user.save({ validateBeforeSave: false });
+
+    // Send email using nodemailer if configured
+    let emailSent = false;
+    const smtpHost = process.env.SMTP_HOST;
+    const smtpPort = process.env.SMTP_PORT;
+    const smtpUser = process.env.SMTP_USER || process.env.EMAIL_USER;
+    const smtpPass = process.env.SMTP_PASS || process.env.EMAIL_PASS;
+
+    if (smtpHost && smtpUser && smtpPass) {
+      try {
+        const nodemailer = await import('nodemailer');
+        const transporter = nodemailer.default.createTransport({
+          host: smtpHost,
+          port: Number(smtpPort) || 587,
+          secure: Number(smtpPort) === 465,
+          auth: {
+            user: smtpUser,
+            pass: smtpPass,
+          },
+        });
+
+        await transporter.sendMail({
+          from: `"PetNest Support" <${smtpUser}>`,
+          to: user.email,
+          subject: 'PetNest Password Reset Verification Code',
+          text: `Your password reset verification code is: ${otp}. It is valid for 10 minutes.`,
+          html: `<div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px; max-width: 500px; margin: auto;">
+            <h2 style="color: #1e3a8a; text-align: center;">Reset Your Password</h2>
+            <p>Hello,</p>
+            <p>You requested to reset your password. Use the verification code below to verify your identity. This code is valid for 10 minutes.</p>
+            <div style="background-color: #f3f4f6; padding: 15px; border-radius: 8px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 5px; color: #1e3a8a; margin: 20px 0;">
+              ${otp}
+            </div>
+            <p>If you did not request a password reset, please ignore this email.</p>
+            <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
+            <p style="font-size: 12px; color: #9ca3af; text-align: center;">PetNest E-Commerce</p>
+          </div>`,
+        });
+        emailSent = true;
+      } catch (err) {
+        console.error('Nodemailer error sending email:', err.message);
+      }
+    }
+
+    res.status(200).json({
+      message: emailSent 
+        ? 'Verification code sent to your email' 
+        : 'Verification code generated (check development console/screen banner)',
+      devOtp: otp,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Verify OTP for password reset
+// @route   POST /api/auth/verify-otp
+// @access  Public
+export const verifyOtp = async (req, res) => {
+  const { email, otp } = req.body;
+
+  try {
+    if (!email || !otp) {
+      return res.status(400).json({ message: 'Email and verification code are required' });
+    }
+
+    const user = await User.findOne({
+      email: email.trim(),
+      resetPasswordOtp: otp,
+      resetPasswordOtpExpire: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid or expired verification code' });
+    }
+
+    // OTP is valid. Clear OTP fields
+    user.resetPasswordOtp = undefined;
+    user.resetPasswordOtpExpire = undefined;
+
+    // Generate a standard reset password token for step 3
+    const resetToken = user.getResetPasswordToken();
+    await user.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+      message: 'Verification successful',
+      resetToken,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

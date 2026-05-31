@@ -11,6 +11,8 @@ import {
     updateUser,
     forgotPassword,
     resetPassword,
+    sendOtp,
+    verifyOtp,
 } from '../controllers/authController.js';
 import { protect, admin } from '../middlewares/authMiddleware.js';
 import { registerValidation, loginValidation } from '../middlewares/validationMiddleware.js';
@@ -22,6 +24,9 @@ router.post('/login', loginValidation, authUser);
 router.post('/logout', logoutUser);
 router.post('/forgot-password', forgotPassword);
 router.put('/reset-password/:token', resetPassword);
+router.put('/reset-password', resetPassword);
+router.post('/send-otp', sendOtp);
+router.post('/verify-otp', verifyOtp);
 
 router.route('/profile').get(protect, getUserProfile).put(protect, updateUserProfile);
 
