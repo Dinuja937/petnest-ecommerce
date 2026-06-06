@@ -350,7 +350,7 @@ export const sendOtp = async (req, res) => {
       message: emailSent 
         ? 'Verification code sent to your email' 
         : 'Verification code generated (check development console/screen banner)',
-      devOtp: otp,
+      ...(emailSent ? {} : { devOtp: otp }),
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

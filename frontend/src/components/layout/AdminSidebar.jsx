@@ -32,18 +32,25 @@ const AdminSidebar = () => {
     }`;
 
   return (
-    <div className="flex">
+    <>
       {/* Mobile toggle button */}
       <button
-        className="p-2 md:hidden text-blue-200"
+        className="fixed top-4 left-4 p-2 md:hidden text-blue-950 z-40 bg-white rounded-lg shadow"
         onClick={toggleSidebar}
         aria-label="Toggle menu"
       >
         <Menu className="w-6 h-6" />
       </button>
+      {/* Mobile overlay */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 md:hidden z-30"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
       {/* Fixed Sidebar */}
       <aside
-        className={`bg-blue-950 text-blue-50 w-64 flex flex-col p-6 shadow-xl transform transition-transform duration-200 ${isOpen ? 'translate-x-0' : '-translate-x-full'
+        className={`fixed left-0 top-0 bg-blue-950 text-blue-50 w-64 h-screen flex flex-col p-6 shadow-xl transform transition-transform duration-200 z-35 ${isOpen ? 'translate-x-0' : '-translate-x-full'
           } md:translate-x-0`}
       >
         <h1 className="text-2xl font-bold mb-8 text-center">Admin Panel</h1>
@@ -71,7 +78,7 @@ const AdminSidebar = () => {
           <LogOut className="w-5 h-5" /> Logout
         </button>
       </aside>
-    </div>
+    </>
   );
 };
 

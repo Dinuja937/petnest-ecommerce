@@ -173,7 +173,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* Welcome Banner Card */}
-      <div className="bg-gradient-to-r from-blue-900 via-blue-950 to-indigo-950 text-white rounded-2xl p-6 shadow-md border border-blue-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <div className="bg-linear-to-r from-blue-900 via-blue-950 to-indigo-950 text-white rounded-2xl p-6 shadow-md border border-blue-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
           <h2 className="text-2xl font-bold">Welcome back, {userInfo?.name || 'Admin'}!</h2>
           <p className="text-blue-200 mt-2 text-sm max-w-xl">
@@ -400,7 +400,7 @@ const AdminDashboard = () => {
                         className="w-10 h-10 object-cover rounded-lg border border-gray-100 bg-gray-50"
                       />
                       <div>
-                        <p className="text-sm font-bold text-blue-950 line-clamp-1 max-w-[200px] sm:max-w-xs">{product.name}</p>
+                        <p className="text-sm font-bold text-blue-950 line-clamp-1 max-w-50 sm:max-w-xs">{product.name}</p>
                         <p className="text-xs text-gray-400 capitalize">{product.category}</p>
                       </div>
                     </div>
@@ -532,7 +532,7 @@ const AdminDashboard = () => {
                       </div>
                       <div>
                         <p className="text-xs font-bold text-blue-950">{user.name}</p>
-                        <p className="text-[10px] text-gray-400 truncate max-w-[140px]">{user.email}</p>
+                        <p className="text-[10px] text-gray-400 truncate max-w-35">{user.email}</p>
                       </div>
                     </div>
                     <span
