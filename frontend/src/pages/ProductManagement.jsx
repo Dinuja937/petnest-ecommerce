@@ -37,12 +37,13 @@ const ProductManagement = () => {
   const [formData, setFormData] = useState(emptyForm);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
+  const [saveError, setSaveError] = useState('');
 
   const fetchProducts = async () => {
     try {
       setLoading(true);
       const { data } = await api.get('/products');
-      setProducts(data);
+      setProducts(Array.isArray(data) ? data : []);
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to load products');
     } finally {
@@ -97,6 +98,7 @@ const ProductManagement = () => {
     setFormData(emptyForm);
     setImageFile(null);
     setImagePreview('');
+    setSaveError('');
   };
 
   const openEditModal = (product) => {
@@ -112,6 +114,7 @@ const ProductManagement = () => {
     });
     setImageFile(null);
     setImagePreview(product.image || '');
+    setSaveError('');
   };
 
   const closeModal = () => {
@@ -120,6 +123,7 @@ const ProductManagement = () => {
     setFormData(emptyForm);
     setImageFile(null);
     setImagePreview('');
+    setSaveError('');
   };
 
   const handleChange = (e) => {
@@ -165,11 +169,14 @@ const ProductManagement = () => {
   });
 
   const validateForm = () => {
+    const price = Number(formData.price);
+    const stock = Number(formData.stock);
+
     if (!formData.name.trim()) return 'Product name is required';
     if (!formData.description.trim()) return 'Description is required';
     if (!formData.image.trim() && !imageFile) return 'Product image is required';
-    if (Number(formData.price) < 0 || formData.price === '') return 'Price must be 0 or higher';
-    if (Number(formData.stock) < 0 || formData.stock === '') return 'Stock must be 0 or higher';
+    if (formData.price === '' || !Number.isFinite(price) || price < 0) return 'Price must be 0 or higher';
+    if (formData.stock === '' || !Number.isFinite(stock) || stock < 0) return 'Stock must be 0 or higher';
     return null;
   };
 
@@ -184,28 +191,36 @@ const ProductManagement = () => {
 
     try {
       setSaving(true);
+      setSaveError('');
       const hasImageFile = Boolean(imageFile);
       const payload = hasImageFile ? buildMultipartPayload() : buildJsonPayload();
 
       if (modalMode === 'create') {
         const { data } = await api.post('/products', payload);
-        setProducts((current) => [data, ...current]);
+        setProducts((current) => [data, ...current.filter((product) => product._id !== data._id)]);
+        setSearchTerm('');
+        setCategoryFilter('All');
+        closeModal();
         toast.success('Product created successfully');
       } else if (selectedProduct) {
         const { data } = await api.put(`/products/${selectedProduct._id}`, payload);
         setProducts((current) =>
           current.map((product) => (product._id === selectedProduct._id ? data : product))
         );
+        setSearchTerm('');
+        setCategoryFilter('All');
+        closeModal();
         toast.success('Product updated successfully');
       }
-
-      await fetchProducts();
-      setSearchTerm('');
-      setCategoryFilter('All');
-      closeModal();
     } catch (err) {
-      const message = err.response?.data?.message || err.message || 'Failed to save product';
+      const message =
+        err.response?.status === 401
+          ? 'Your admin session expired. Please log in again and create the product.'
+          : err.response?.status === 403
+            ? 'The server rejected this action. Please log out, log in again, and try creating the product.'
+          : err.response?.data?.message || err.message || 'Failed to save product';
       console.error('Product save failed:', err.response?.data || err);
+      setSaveError(message);
       toast.error(message);
     } finally {
       setSaving(false);
@@ -453,7 +468,7 @@ const ProductManagement = () => {
 
                 <div className="space-y-2">
                   <label htmlFor="imageFile" className="text-sm font-semibold text-blue-950">
-                    Upload Image
+                    Upload Image to Cloudinary
                   </label>
                   <input
                     id="imageFile"
@@ -466,7 +481,7 @@ const ProductManagement = () => {
 
                 <div className="space-y-2">
                   <label htmlFor="image" className="text-sm font-semibold text-blue-950">
-                    Or Image URL
+                    Or Import Image URL
                   </label>
                   <input
                     id="image"
@@ -565,6 +580,12 @@ const ProductManagement = () => {
                     className="w-full px-4 py-3 rounded-xl border border-blue-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none text-sm resize-none"
                   />
                 </div>
+
+                {saveError && (
+                  <p className="text-sm font-semibold text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-3">
+                    {saveError}
+                  </p>
+                )}
 
                 <div className="flex flex-col sm:flex-row justify-end gap-3 pt-2">
                   <button
