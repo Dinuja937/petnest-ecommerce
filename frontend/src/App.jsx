@@ -18,6 +18,8 @@ import OrderManagement from './pages/OrderManagement';
 import ProductList from './pages/ProductList';
 import ProductDetails from './pages/ProductDetails';
 import ScrollToTop from './components/ScrollToTop';
+import PaymentSuccess from './pages/PaymentSuccess';
+import PaymentCancel from './pages/PaymentCancel';
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
           <Route path="shop" element={<ProductList />} />
           <Route path="category/:category" element={<ProductList />} />
           <Route path="product/:id" element={<ProductDetails />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-cancel" element={<PaymentCancel />} />
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>

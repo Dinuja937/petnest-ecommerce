@@ -91,24 +91,33 @@ const Checkout = () => {
                 totalPrice,
             };
 
-            await api.post('/orders', orderData);
-            toast.success('Order placed successfully!');
-            
-            // Only clear cart if it wasn't a "buy now" order
-            if (!buyNowProduct) {
-                dispatch(clearCartItems());
+            if (paymentMethod === 'Card (Stripe)') {
+                const { data } = await api.post('/payments/create-checkout-session', orderData);
+                window.location.href = data.url;
+            } else {
+                await api.post('/orders', orderData);
+                toast.success('Order placed successfully!');
+                
+                // Only clear cart if it wasn't a "buy now" order
+                if (!buyNowProduct) {
+                    dispatch(clearCartItems());
+                }
+                navigate('/profile');
             }
-            navigate('/profile');
         } catch (err) {
             const errorMsg = err.response?.data?.message || 'Failed to place order';
             toast.error(errorMsg);
-        } finally {
             setIsLoading(false);
         }
     };
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+            {isLoading && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/70 backdrop-blur-sm">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                </div>
+            )}
             <h1 className="text-3xl font-extrabold text-blue-950 mb-8">Checkout</h1>
 
             <form onSubmit={submitHandler} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
