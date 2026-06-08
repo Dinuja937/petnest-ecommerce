@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Box, ShoppingCart, Users, LogOut, User, Menu } from 'lucide-react';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../store/slices/authSlice';
+import { clearCartItems } from '../../store/slices/cartSlice';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
 
 const AdminSidebar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => setIsOpen(!isOpen);
@@ -13,6 +17,8 @@ const AdminSidebar = () => {
   const logoutHandler = async () => {
     try {
       await api.post('/auth/logout');
+      dispatch(logout());
+      dispatch(clearCartItems());
       toast.success('Logged out');
       navigate('/login');
     } catch (err) {

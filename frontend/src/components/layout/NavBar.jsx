@@ -1,6 +1,7 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../store/slices/authSlice';
+import { clearCartItems } from '../../store/slices/cartSlice';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
 import { ShoppingCart } from 'lucide-react';
@@ -14,11 +15,13 @@ const NavBar = () => {
     try {
       await api.post('/auth/logout');
       dispatch(logout());
+      dispatch(clearCartItems());
       toast.success('Logged out successfully');
       navigate('/');
     } catch (error) {
       console.error(error);
       dispatch(logout());
+      dispatch(clearCartItems());
       toast.success('Logged out successfully');
       navigate('/');
     }

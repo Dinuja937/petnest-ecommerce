@@ -2,6 +2,7 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../store/slices/authSlice';
+import { clearCartItems } from '../store/slices/cartSlice';
 import api from '../services/api';
 import NavBar from './layout/NavBar';
 import Footer from './layout/Footer';
@@ -16,6 +17,7 @@ const Layout = () => {
     try {
       await api.post('/auth/logout');
       dispatch(logout());
+      dispatch(clearCartItems());
       navigate('/login');
     } catch (error) {
       console.error(error);
