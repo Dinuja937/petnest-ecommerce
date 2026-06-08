@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { CreditCard, Truck } from 'lucide-react';
 import { clearCartItems } from '../store/slices/cartSlice';
@@ -9,15 +9,33 @@ import toast from 'react-hot-toast';
 const Checkout = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const location = useLocation();
 
     const { cartItems } = useSelector((state) => state.cart);
     const { userInfo } = useSelector((state) => state.auth);
 
+    // Retrieve product passed via Proceed to Checkout (buy now)
+    const buyNowProduct = location.state?.buyNowProduct;
+
+    // Determine which items to checkout: either the buy‑now product alone, or the existing cart items.
+    const checkoutItems = buyNowProduct
+        ? [
+            {
+                product: buyNowProduct._id,
+                name: buyNowProduct.name,
+                image: buyNowProduct.image,
+                price: buyNowProduct.price,
+                qty: 1,
+            },
+          ]
+        : cartItems;
+
+    // If there are no items to checkout, redirect back to cart page.
     React.useEffect(() => {
-        if (cartItems.length === 0) {
+        if (checkoutItems.length === 0) {
             navigate('/cart');
         }
-    }, [cartItems, navigate]);
+    }, [checkoutItems, navigate]);
 
     // ==== Form state ====
     const [fullName, setFullName] = useState('');
@@ -25,12 +43,16 @@ const Checkout = () => {
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');
     const [postalCode, setPostalCode] = useState('');
-    const [country, setCountry] = useState('Sri Lanka'); // default country for backend compatibility          // hidden – required by backend
+    const [country, setCountry] = useState('Sri Lanka'); // default country for backend compatibility
     const [paymentMethod, setPaymentMethod] = useState('Cash on Delivery');
     const [isLoading, setIsLoading] = useState(false);
 
-    const itemsPrice = cartItems.reduce((acc, item) => acc + item.price * (item.qty || 1), 0);
-    const shippingPrice = itemsPrice > 3000 ? 0 : 299;
+    const itemsPrice = checkoutItems.reduce((acc, item) => acc + item.price * (item.qty || 1), 0);
+    const shippingPrice = checkoutItems.reduce((sum, item) => {
+    const itemShipping = item.price > 3000 ? 0 : 299 * (item.qty || 1);
+    return sum + itemShipping;
+  }, 0);
+
     const totalPrice = itemsPrice + shippingPrice;
 
     const submitHandler = async (e) => {
@@ -45,7 +67,7 @@ const Checkout = () => {
         try {
             setIsLoading(true);
 
-            const orderItems = cartItems.map((item) => ({
+            const orderItems = checkoutItems.map((item) => ({
                 product: item.product,
                 name: item.name,
                 image: item.image || 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=200',
@@ -71,7 +93,11 @@ const Checkout = () => {
 
             await api.post('/orders', orderData);
             toast.success('Order placed successfully!');
-            dispatch(clearCartItems());
+            
+            // Only clear cart if it wasn't a "buy now" order
+            if (!buyNowProduct) {
+                dispatch(clearCartItems());
+            }
             navigate('/profile');
         } catch (err) {
             const errorMsg = err.response?.data?.message || 'Failed to place order';
@@ -228,7 +254,7 @@ const Checkout = () => {
 
                         {/* Items List Mini */}
                         <div className="max-h-48 overflow-y-auto mb-4 space-y-3 pr-2 scrollbar-thin">
-                            {cartItems.map((item) => (
+                            {checkoutItems.map((item) => (
                                 <div key={item.product} className="flex justify-between items-center text-sm gap-2">
                                     <div className="flex items-center gap-2">
                                         <span className="font-semibold text-blue-950">{item.qty || 1}x</span>
@@ -263,8 +289,6 @@ const Checkout = () => {
                             <span>Total Price</span>
                             <span className="text-xl font-extrabold text-blue-900">Rs. {totalPrice.toFixed(2)}</span>
                         </div>
-
-                        {/* NOTE: secure checkout badge removed as per request */}
                     </div>
                 </div>
             </form>

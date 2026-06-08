@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import api from '../services/api';
-import { addToCart } from '../store/slices/cartSlice';
+import { addToCart, clearCartItems } from '../store/slices/cartSlice';
 import { ShoppingCart, ArrowLeft, ShieldCheck, Heart, Info, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -56,6 +56,19 @@ const ProductDetails = () => {
     toast.success(`${product.name} added to cart!`);
     navigate('/cart');
   };
+  
+  const buyNowHandler = () => {
+    if (!userInfo) {
+      toast.error('Please login first to proceed');
+      navigate('/login');
+      return;
+    }
+    if (!product) return;
+    // Navigate to checkout with the current product without modifying the cart
+    navigate('/checkout', { state: { buyNowProduct: product } });
+  };
+
+
 
   if (loading) {
     return (
@@ -188,24 +201,33 @@ const ProductDetails = () => {
 
               {/* Action buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <button
-                  type="button"
-                  disabled={isOutOfStock}
-                  onClick={addToCartHandler}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed disabled:shadow-none cursor-pointer"
-                >
-                  <ShoppingCart size={20} />
-                  {isOutOfStock ? 'Sold Out' : 'Add to Cart'}
-                </button>
-                <button
-                  type="button"
-                  className="px-5 py-4 border border-gray-200 hover:border-red-200 hover:bg-red-50 text-gray-500 hover:text-red-600 rounded-xl transition-all flex items-center justify-center"
-                  title="Add to Wishlist"
-                  onClick={() => toast.success('Added to wishlist!')}
-                >
-                  <Heart size={20} />
-                </button>
-              </div>
+  <button
+    type="button"
+    disabled={isOutOfStock}
+    onClick={addToCartHandler}
+    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed disabled:shadow-none cursor-pointer"
+  >
+    <ShoppingCart size={20} />
+    {isOutOfStock ? 'Sold Out' : 'Add to Cart'}
+  </button>
+  <button
+    type="button"
+    className="px-5 py-4 border border-gray-200 hover:border-red-200 hover:bg-red-50 text-gray-500 hover:text-red-600 rounded-xl transition-all flex items-center justify-center"
+    title="Add to Wishlist"
+    onClick={() => toast.success('Added to wishlist!')}
+  >
+    <Heart size={20} />
+  </button>
+  <button
+    type="button"
+    disabled={isOutOfStock}
+    onClick={buyNowHandler}
+    className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed disabled:shadow-none cursor-pointer"
+  >
+    <ShoppingCart size={20} />
+    Proceed to Checkout
+  </button>
+</div>
 
               {/* Guarantees */}
               <div className="flex flex-wrap gap-4 pt-2">
