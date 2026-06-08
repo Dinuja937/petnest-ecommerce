@@ -88,7 +88,7 @@ const Cart = () => {
 
           <div className="pt-4">
             <Link
-              to="/"
+              to="/shop"
               className="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold transition-colors"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -102,7 +102,7 @@ const Cart = () => {
           <CartSummary
             itemsPrice={itemsPrice}
             shippingPrice={shippingPrice}
-              totalPrice={totalPrice}
+            totalPrice={totalPrice}
             onCheckout={checkoutHandler}
           />
         </div>

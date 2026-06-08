@@ -52,7 +52,7 @@ const NavBar = () => {
           <Link to="/cart" className="relative text-gray-600 hover:text-blue-600 transition-colors">
             <ShoppingCart className="w-5 h-5" />
             {cartItems.length > 0 && (
-              <span className="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-blue-600 rounded-full animate-pulse">
+              <span className="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-blue-600 rounded-full">
                 {cartItems.reduce((acc, item) => acc + (item.qty || 1), 0)}
               </span>
             )}
