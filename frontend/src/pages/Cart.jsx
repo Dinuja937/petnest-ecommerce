@@ -29,8 +29,8 @@ const Cart = () => {
 
   const itemsPrice = cartItems.reduce((acc, item) => acc + item.price * (item.qty || 1), 0);
   const shippingPrice = itemsPrice > 50 || itemsPrice === 0 ? 0 : 5.99;
-  const taxPrice = itemsPrice * 0.08;
-  const totalPrice = itemsPrice + shippingPrice + taxPrice;
+
+  const totalPrice = itemsPrice + shippingPrice;
 
   const checkoutHandler = () => {
     navigate('/checkout');
@@ -86,8 +86,7 @@ const Cart = () => {
           <CartSummary
             itemsPrice={itemsPrice}
             shippingPrice={shippingPrice}
-            taxPrice={taxPrice}
-            totalPrice={totalPrice}
+              totalPrice={totalPrice}
             onCheckout={checkoutHandler}
           />
         </div>

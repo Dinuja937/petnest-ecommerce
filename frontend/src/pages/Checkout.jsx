@@ -28,8 +28,8 @@ const Checkout = () => {
 
     const itemsPrice = cartItems.reduce((acc, item) => acc + item.price * (item.qty || 1), 0);
     const shippingPrice = itemsPrice > 50 ? 0 : 5.99;
-    const taxPrice = itemsPrice * 0.08;
-    const totalPrice = itemsPrice + shippingPrice + taxPrice;
+  
+    const totalPrice = itemsPrice + shippingPrice;
 
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -56,7 +56,6 @@ const Checkout = () => {
                 paymentMethod,
                 itemsPrice,
                 shippingPrice,
-                taxPrice,
                 totalPrice,
             };
 
@@ -212,10 +211,6 @@ const Checkout = () => {
                                         `$${shippingPrice.toFixed(2)}`
                                     )}
                                 </span>
-                            </div>
-                            <div className="flex justify-between text-gray-600">
-                                <span>Tax (8%)</span>
-                                <span className="font-semibold text-blue-950">${taxPrice.toFixed(2)}</span>
                             </div>
                         </div>
 

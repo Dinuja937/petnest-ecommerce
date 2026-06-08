@@ -3,7 +3,7 @@ import { ArrowRight, RefreshCw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
-const CartSummary = ({ itemsPrice, shippingPrice, taxPrice, totalPrice, isLoading, onCheckout }) => {
+const CartSummary = ({ itemsPrice, shippingPrice, totalPrice, isLoading, onCheckout }) => {
   const navigate = useNavigate();
 
   const handleCheckout = () => {
@@ -32,10 +32,7 @@ const CartSummary = ({ itemsPrice, shippingPrice, taxPrice, totalPrice, isLoadin
             )}
           </span>
         </div>
-        <div className="flex justify-between text-gray-600">
-          <span>Tax (8%)</span>
-          <span className="font-semibold text-blue-950">${taxPrice?.toFixed(2) || '0.00'}</span>
-        </div>
+
       </div>
 
       <div className="flex justify-between text-lg font-bold text-blue-950 py-4 mb-4">
