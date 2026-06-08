@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ArrowLeft, ShoppingBag } from 'lucide-react';
@@ -10,10 +10,22 @@ import CartSummary from '../components/cart/CartSummary';
 const Cart = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (!userInfo) {
+      toast.error('Please login to access your cart');
+      navigate('/login');
+    }
+  }, [userInfo, navigate]);
 
   const { cartItems } = useSelector((state) => state.cart);
 
   const updateQuantityHandler = (item, qty) => {
+    if (!userInfo) {
+      toast.error('Session expired. Please login again.');
+      return;
+    }
     if (qty <= 0) return;
     if (item.countInStock && qty > item.countInStock) {
       toast.error(`Only ${item.countInStock} items in stock`);
@@ -23,6 +35,10 @@ const Cart = () => {
   };
 
   const removeFromCartHandler = (id) => {
+    if (!userInfo) {
+      toast.error('Session expired. Please login again.');
+      return;
+    }
     dispatch(removeFromCart(id));
     toast.success('Item removed from cart');
   };

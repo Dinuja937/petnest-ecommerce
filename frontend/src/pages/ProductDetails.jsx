@@ -11,6 +11,8 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const { userInfo } = useSelector((state) => state.auth);
+
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -35,6 +37,11 @@ const ProductDetails = () => {
   }, [id]);
 
   const addToCartHandler = () => {
+    if (!userInfo) {
+      toast.error('Please login first to add items to cart');
+      navigate('/login');
+      return;
+    }
     if (!product) return;
     dispatch(
       addToCart({

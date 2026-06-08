@@ -1,14 +1,19 @@
 import React from 'react';
 import { Plus, Minus, Trash2 } from 'lucide-react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, removeFromCart } from '../../store/slices/cartSlice';
 import toast from 'react-hot-toast';
 
 const CartItem = ({ item }) => {
   const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.auth);
   const qty = item.qty || 1;
 
   const updateQty = (newQty) => {
+    if (!userInfo) {
+      toast.error('Session expired. Please login again.');
+      return;
+    }
     if (newQty < 1) return;
     if (item.countInStock && newQty > item.countInStock) {
       toast.error(`Only ${item.countInStock} items in stock`);
