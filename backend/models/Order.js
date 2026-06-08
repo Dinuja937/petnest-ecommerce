@@ -39,6 +39,10 @@ const orderSchema = new mongoose.Schema(
     },
     itemsPrice: { type: Number, required: true, default: 0.0 },
 
+    paymentStatus: { type: String, enum: ['Pending', 'Paid'], default: 'Pending' },
+    stripeSessionId: { type: String },
+    paymentIntentId: { type: String },
+
     shippingPrice: { type: Number, required: true, default: 0.0 },
     totalPrice: { type: Number, required: true, default: 0.0 },
     isPaid: { type: Boolean, required: true, default: false },
