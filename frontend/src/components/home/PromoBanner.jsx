@@ -6,13 +6,13 @@ const PromoBanner = () => {
       {/* Scroll Marquee Wrapper */}
       <div className="flex whitespace-nowrap animate-marquee">
         <div className="flex gap-16 shrink-0 items-center justify-around w-full">
-          <span>🚚 Free Shipping on Orders Above $50</span>
+          <span>🚚 Free Shipping on Orders Above Rs. 3000</span>
           <span>🐾 Premium Quality Pet Supplies & Treats</span>
           <span>🎁 Save 10% on your first order with code: <strong className="text-white">PETNEST10</strong></span>
           <span>❤️ Loved by pets, trusted by owners</span>
         </div>
         <div className="flex gap-16 shrink-0 items-center justify-around w-full" aria-hidden="true">
-          <span>🚚 Free Shipping on Orders Above $50</span>
+          <span>🚚 Free Shipping on Orders Above Rs. 3000</span>
           <span>🐾 Premium Quality Pet Supplies & Treats</span>
           <span>🎁 Save 10% on your first order with code: <strong className="text-white">PETNEST10</strong></span>
           <span>❤️ Loved by pets, trusted by owners</span>

@@ -73,7 +73,7 @@ const ProductCard = ({ product }) => {
 
         <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
           <span className="text-xl font-black text-blue-900">
-            ${price.toFixed(2)}
+            Rs. {price.toFixed(2)}
           </span>
           <Link
             to={`/product/${_id}`}

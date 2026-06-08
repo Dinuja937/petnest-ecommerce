@@ -28,7 +28,7 @@ const Cart = () => {
   };
 
   const itemsPrice = cartItems.reduce((acc, item) => acc + item.price * (item.qty || 1), 0);
-  const shippingPrice = itemsPrice > 50 || itemsPrice === 0 ? 0 : 5.99;
+  const shippingPrice = itemsPrice > 3000 || itemsPrice === 0 ? 0 : 299;
 
   const totalPrice = itemsPrice + shippingPrice;
 

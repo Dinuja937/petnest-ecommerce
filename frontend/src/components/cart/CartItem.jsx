@@ -34,7 +34,7 @@ const CartItem = ({ item }) => {
           {item.name}
         </h3>
         <p className="text-sm text-gray-500 mt-1">PetNest Certified Item</p>
-        <p className="text-lg font-bold text-blue-900 mt-2">${item.price.toFixed(2)}</p>
+        <p className="text-lg font-bold text-blue-900 mt-2">Rs. {item.price.toFixed(2)}</p>
       </div>
 
       {/* Quantity Controls */}

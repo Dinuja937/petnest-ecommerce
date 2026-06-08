@@ -79,7 +79,7 @@ const OrderManagement = () => {
                   {new Date(order.createdAt).toLocaleDateString()}
                 </td>
                 <td className="px-4 py-2 text-sm font-medium text-blue-900">
-                  ${order.totalPrice?.toFixed(2)}
+                  Rs. {order.totalPrice?.toFixed(2)}
                 </td>
                 <td className="px-4 py-2 text-sm">
                   {order.isDelivered ? (

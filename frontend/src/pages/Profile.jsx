@@ -129,7 +129,7 @@ const Profile = () => {
             <li key={order._id} className="border p-4 rounded-md bg-gray-50">
               <p className="font-medium">Order ID: {order._id}</p>
               <p>Status: {order.isDelivered ? 'Delivered' : order.isPaid ? 'Paid' : 'Pending'}</p>
-              <p>Total: ${order.totalPrice?.toFixed(2) || order.totalPrice}</p>
+              <p>Total: Rs. {order.totalPrice?.toFixed(2) || order.totalPrice}</p>
               <Link
                 to={`/order/${order._id}`}
                 className="text-blue-600 hover:underline mt-2 inline-block"
