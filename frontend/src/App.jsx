@@ -17,10 +17,12 @@ import ProductManagement from './pages/ProductManagement';
 import OrderManagement from './pages/OrderManagement';
 import ProductList from './pages/ProductList';
 import ProductDetails from './pages/ProductDetails';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         {/* Public Layout with NavBar/Footer */}
         <Route path="/" element={<Layout />}>

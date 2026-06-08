@@ -64,7 +64,7 @@ const Cart = () => {
             Looks like you haven't added anything to your cart yet. Let's find some amazing treats and essentials for your pets!
           </p>
           <Link
-            to="/"
+            to="/shop"
             className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-md hover:shadow-lg"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
