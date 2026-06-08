@@ -44,7 +44,7 @@ const CategoryBanners = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {categories.map((cat) => (
             <article key={cat.name} className="relative group rounded-2xl overflow-hidden shadow-lg shadow-blue-950/5 border border-blue-100 hover:shadow-xl transition-all duration-300">
-              <Link to={cat.link} className="block relative aspect-[4/3] sm:aspect-[16/10] md:aspect-[4/3] w-full h-full overflow-hidden">
+              <Link to={cat.link} className="block relative aspect-[4/3] sm:aspect-[16/10] md:aspect-[4/3] w-full h-full overflow-hidden" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                 {/* Background Image */}
                 <img
                   src={cat.image}
