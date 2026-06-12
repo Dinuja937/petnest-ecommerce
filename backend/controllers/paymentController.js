@@ -36,7 +36,7 @@ export const createCheckoutSession = asyncHandler(async (req, res) => {
     cancel_url: `${process.env.CLIENT_URL}/payment-cancel`,
     metadata: {
       userId: userId.toString(),
-      orderItems: JSON.stringify(cartItems),
+      orderItems: JSON.stringify(items),
       shippingAddress: JSON.stringify(shippingAddress),
       paymentMethod,
       itemsPrice,
