@@ -96,13 +96,16 @@ const Checkout = () => {
                 window.location.href = data.url;
             } else {
                 await api.post('/orders', orderData);
-                toast.success('Order placed successfully!');
+                toast.success('Order placed successfully! Redirecting to order history...');
                 
                 // Only clear cart if it wasn't a "buy now" order
                 if (!buyNowProduct) {
                     dispatch(clearCartItems());
                 }
-                navigate('/profile');
+                
+                setTimeout(() => {
+                    navigate('/profile');
+                }, 2000);
             }
         } catch (err) {
             const errorMsg = err.response?.data?.message || 'Failed to place order';
