@@ -4,7 +4,7 @@ import api from '../../services/api';
 // Async thunk for fetching products
 export const fetchProducts = createAsyncThunk('products/fetchAll', async (_, { rejectWithValue }) => {
   try {
-    const { data } = await api.get('/products');
+    const { data } = await api.get('/api/products');
     return data;
   } catch (err) {
     // Return a rejected value with a message for the slice to handle
