@@ -2,7 +2,7 @@ import React from 'react';
 
 const PromoBanner = () => {
   return (
-    <div className="relative w-full bg-gradient-to-r from-blue-950 via-blue-900 to-blue-950 text-blue-100 py-2.5 overflow-hidden border-b border-blue-800 text-xs sm:text-sm font-medium tracking-wide z-10">
+    <div className="relative w-full bg-linear-to-r from-blue-950 via-blue-900 to-blue-950 text-blue-100 py-2.5 overflow-hidden border-b border-blue-800 text-xs sm:text-sm font-medium tracking-wide z-10">
       {/* Scroll Marquee Wrapper */}
       <div className="flex whitespace-nowrap animate-marquee">
         <div className="flex gap-16 shrink-0 items-center justify-around w-full">

@@ -34,7 +34,7 @@ const Layout = () => {
       <Toaster position="top-right" />
       {!isAdminRoute && <NavBar />}
 
-      <main className={`flex-grow w-full min-w-0 ${isHome ? '' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'}`}>
+      <main className={`grow w-full min-w-0 ${isHome ? '' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'}`}>
         <Outlet />
       </main>
 

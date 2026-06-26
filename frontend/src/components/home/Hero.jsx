@@ -12,7 +12,7 @@ const Hero = () => {
       />
 
       {/* Premium Dark Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-950/90 via-blue-900/60 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-r from-blue-950/90 via-blue-900/60 to-transparent" />
 
       {/* Hero content container */}
       <div className="relative max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 z-10 text-white animate-fade-in-up">
@@ -22,7 +22,7 @@ const Hero = () => {
           </span>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
-            Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-white">PetNest</span>
+            Welcome to <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-200 to-white">PetNest</span>
           </h1>
 
           <p className="text-base sm:text-lg lg:text-xl text-blue-100/90 leading-relaxed font-light">
@@ -44,7 +44,7 @@ const Hero = () => {
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-blue-50/50 to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-16 bg-linear-to-t from-blue-50/50 to-transparent pointer-events-none" />
 
       {/* Tailwind & keyframe CSS injection */}
       <style>{`
