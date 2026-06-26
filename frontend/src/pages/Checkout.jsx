@@ -6,6 +6,7 @@ import api from '../services/api';
 import toast from 'react-hot-toast';
 import CheckoutForm from '../components/cart/CheckoutForm';
 import LoadingSpinner from '../components/common/LoadingSpinner';
+import { calculateShipping } from '../utils/priceUtils';
 
 const Checkout = () => {
     const navigate = useNavigate();
@@ -49,10 +50,7 @@ const Checkout = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const itemsPrice = checkoutItems.reduce((acc, item) => acc + item.price * (item.qty || 1), 0);
-    const shippingPrice = checkoutItems.reduce((sum, item) => {
-    const itemShipping = item.price > 3000 ? 0 : 299 * (item.qty || 1);
-    return sum + itemShipping;
-  }, 0);
+    const shippingPrice = calculateShipping(checkoutItems);
 
     const totalPrice = itemsPrice + shippingPrice;
 

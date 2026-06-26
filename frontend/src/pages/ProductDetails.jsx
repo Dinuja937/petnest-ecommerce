@@ -6,6 +6,8 @@ import useProduct from '../hooks/useProduct';
 import { addToCart } from '../store/slices/cartSlice';
 import { ShoppingCart, ArrowLeft, ShieldCheck, Heart, Info, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { formatPrice } from '../utils/priceUtils';
+
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -129,7 +131,7 @@ const ProductDetails = () => {
 
               {/* Price */}
               <div className="mt-4 flex items-baseline gap-2">
-                <span className="text-3xl font-black text-blue-900">Rs. {product.price.toFixed(2)}</span>
+                <span className="text-3xl font-black text-blue-900">{formatPrice(product.price)}</span>
                 <span className="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded font-semibold">PetNest Best Price</span>
               </div>
 
