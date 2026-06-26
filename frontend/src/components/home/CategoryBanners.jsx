@@ -44,7 +44,7 @@ const CategoryBanners = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {categories.map((cat) => (
             <article key={cat.name} className="relative group rounded-2xl overflow-hidden shadow-lg shadow-blue-950/5 border border-blue-100 hover:shadow-xl transition-all duration-300">
-              <Link to={cat.link} className="block relative aspect-[4/3] sm:aspect-[16/10] md:aspect-[4/3] w-full h-full overflow-hidden" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+              <Link to={cat.link} className="block relative aspect-4/3 sm:aspect-16/10 md:aspect-4/3 w-full h-full overflow-hidden" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                 {/* Background Image */}
                 <img
                   src={cat.image}
@@ -54,7 +54,7 @@ const CategoryBanners = () => {
                 />
 
                 {/* Dark Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-blue-950/90 via-blue-900/40 to-transparent group-hover:from-blue-950/95 transition-all duration-300" />
+                <div className="absolute inset-0 bg-linear-to-t from-blue-950/90 via-blue-900/40 to-transparent group-hover:from-blue-950/95 transition-all duration-300" />
 
                 {/* Top Badge */}
                 <span className="absolute top-4 left-4 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/20 hover:bg-white/35 text-white backdrop-blur-md border border-white/20 tracking-wider">

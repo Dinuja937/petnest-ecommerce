@@ -56,7 +56,7 @@ const PaymentSuccess = () => {
     }, [status, navigate]);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-[80vh] bg-gradient-to-b from-blue-50/50 to-white px-4 py-12">
+        <div className="flex flex-col items-center justify-center min-h-[80vh] bg-linear-to-b from-blue-50/50 to-white px-4 py-12">
             <div className="w-full max-w-lg bg-white rounded-3xl shadow-xl border border-blue-50/50 p-8 text-center transition-all duration-300 transform hover:shadow-2xl">
                 {status === 'verifying' && (
                     <div className="flex flex-col items-center py-6">
@@ -84,7 +84,7 @@ const PaymentSuccess = () => {
                             </div>
                         </div>
                         
-                        <h1 className="text-3xl font-black bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-2">
+                        <h1 className="text-3xl font-black bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-2">
                             Payment Successful!
                         </h1>
                         
@@ -118,7 +118,7 @@ const PaymentSuccess = () => {
                         <div className="flex flex-col sm:flex-row gap-3 w-full">
                             <button
                                 onClick={() => navigate('/profile')}
-                                className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                                className="flex-1 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
                             >
                                 View Orders <ArrowRight className="w-4 h-4" />
                             </button>
