@@ -94,11 +94,10 @@ const OrderManagement = () => {
                     <p className="text-xs text-brand-text-secondary truncate mt-0.5">{selectedOrder.user?.email || 'N/A'}</p>
                   </div>
 
-                  <div className={`p-4 rounded-brand-md border flex items-center gap-3 ${
-                    selectedOrder.isPaid
-                      ? 'bg-green-50 text-green-800 border-green-200'
-                      : 'bg-amber-50 text-amber-800 border-amber-200'
-                  }`}>
+                  <div className={`p-4 rounded-brand-md border flex items-center gap-3 ${selectedOrder.isPaid
+                    ? 'bg-green-50 text-green-800 border-green-200'
+                    : 'bg-amber-50 text-amber-800 border-amber-200'
+                    }`}>
                     <ShieldCheck className="w-5 h-5 shrink-0" />
                     <div>
                       <p className="text-[10px] font-bold uppercase tracking-wider opacity-85">Payment Clearance</p>
@@ -110,11 +109,10 @@ const OrderManagement = () => {
                     </div>
                   </div>
 
-                  <div className={`p-4 rounded-brand-md border flex items-center gap-3 ${
-                    selectedOrder.isDelivered
-                      ? 'bg-blue-50 text-blue-800 border-blue-200'
-                      : 'bg-gray-50 text-gray-800 border-gray-200'
-                  }`}>
+                  <div className={`p-4 rounded-brand-md border flex items-center gap-3 ${selectedOrder.isDelivered
+                    ? 'bg-blue-50 text-blue-800 border-blue-200'
+                    : 'bg-gray-50 text-gray-800 border-gray-200'
+                    }`}>
                     <Clock className="w-5 h-5 shrink-0" />
                     <div>
                       <p className="text-[10px] font-bold uppercase tracking-wider opacity-85">Fulfillment Status</p>
@@ -276,14 +274,14 @@ const OrderManagement = () => {
                   const statusBadge = order.isDelivered
                     ? 'bg-green-50 text-green-700 border-green-100'
                     : order.isPaid
-                    ? 'bg-blue-50 text-blue-700 border-blue-100'
-                    : 'bg-amber-50 text-amber-700 border-amber-100';
+                      ? 'bg-blue-50 text-blue-700 border-blue-100'
+                      : 'bg-amber-50 text-amber-700 border-amber-100';
 
                   const statusText = order.isDelivered ? 'Delivered' : order.isPaid ? 'Paid' : 'Pending Payment';
 
                   return (
                     <tr key={order._id} className="hover:bg-gray-50/40 transition-colors group">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-brand-text-primary uppercase tracking-wide text-xs">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-brand-text-primary uppercase tracking-wide">
                         #{order._id?.slice(-8)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-brand-text-secondary">
@@ -314,7 +312,7 @@ const OrderManagement = () => {
                             <Eye className="w-3.5 h-3.5" />
                             View Details
                           </button>
-                          
+
                           {!order.isDelivered && (
                             <button
                               onClick={() => deliverOrder(order._id)}

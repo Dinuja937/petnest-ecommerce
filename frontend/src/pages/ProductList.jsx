@@ -47,7 +47,7 @@ const ProductList = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 min-h-screen">
       {/* Premium Store Banner */}
-      <section className="relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 to-indigo-950 p-8 md:p-12 text-white mb-10 shadow-2xl">
+      <section className="relative overflow-hidden rounded-xl bg-linear-to-r from-blue-600 to-indigo-950 p-8 md:p-12 text-white mb-10 shadow-2xl">
         <div className="absolute inset-0 opacity-10 flex items-center justify-center pointer-events-none">
           <ShoppingBag size={320} className="text-white/30" />
         </div>
