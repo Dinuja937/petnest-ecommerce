@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import api from '../services/api';
 import toast from 'react-hot-toast';
-import { Mail, ArrowLeft, KeyRound, ShieldCheck, Eye, EyeOff, Lock } from 'lucide-react';
+import { Mail, ArrowLeft, KeyRound, ShieldCheck, Eye, EyeOff, Lock, RefreshCw } from 'lucide-react';
 
 const ForgotPassword = () => {
   const [step, setStep] = useState(1); // Step 1: Email, Step 2: OTP, Step 3: Reset Password
@@ -168,37 +169,42 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="flex justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-6 bg-white p-10 rounded-2xl shadow-xl border border-blue-50">
+    <div className="flex justify-center items-center py-16 px-4 sm:px-6 lg:px-8 min-h-[80vh]">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="max-w-md w-full space-y-6 bg-brand-card-background p-8 md:p-10 rounded-brand-lg shadow-brand-soft border border-brand-border"
+      >
         
         {/* Progress indicator */}
         {step <= 3 && (
           <div className="flex justify-between items-center px-4 mb-6">
             <div className="flex flex-col items-center">
               <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
-                step >= 1 ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-400'
+                step >= 1 ? 'bg-brand-primary text-white' : 'bg-gray-100 text-gray-400'
               }`}>
                 1
               </div>
-              <span className="text-[10px] mt-1 text-gray-500 font-medium">Email</span>
+              <span className="text-[10px] mt-1 text-brand-text-secondary font-semibold">Email</span>
             </div>
-            <div className={`h-0.5 flex-1 mx-2 transition-all duration-500 ${step >= 2 ? 'bg-blue-600' : 'bg-gray-150'}`} />
+            <div className={`h-0.5 flex-1 mx-2 transition-all duration-500 ${step >= 2 ? 'bg-brand-primary' : 'bg-brand-border'}`} />
             <div className="flex flex-col items-center">
               <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
-                step >= 2 ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-400'
+                step >= 2 ? 'bg-brand-primary text-white' : 'bg-gray-100 text-gray-400'
               }`}>
                 2
               </div>
-              <span className="text-[10px] mt-1 text-gray-500 font-medium">Verify</span>
+              <span className="text-[10px] mt-1 text-brand-text-secondary font-semibold">Verify</span>
             </div>
-            <div className={`h-0.5 flex-1 mx-2 transition-all duration-500 ${step >= 3 ? 'bg-blue-600' : 'bg-gray-150'}`} />
+            <div className={`h-0.5 flex-1 mx-2 transition-all duration-500 ${step >= 3 ? 'bg-brand-primary' : 'bg-brand-border'}`} />
             <div className="flex flex-col items-center">
               <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
-                step >= 3 ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-400'
+                step >= 3 ? 'bg-brand-primary text-white' : 'bg-gray-100 text-gray-400'
               }`}>
                 3
               </div>
-              <span className="text-[10px] mt-1 text-gray-500 font-medium">Reset</span>
+              <span className="text-[10px] mt-1 text-brand-text-secondary font-semibold">Reset</span>
             </div>
           </div>
         )}
@@ -207,20 +213,20 @@ const ForgotPassword = () => {
         {step === 1 && (
           <>
             <div className="text-center">
-              <div className="mx-auto h-12 w-12 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center shadow-inner">
-                <KeyRound size={24} />
+              <div className="mx-auto h-14 w-14 bg-brand-secondary text-brand-primary rounded-full flex items-center justify-center shadow-inner">
+                <KeyRound size={26} />
               </div>
-              <h2 className="mt-4 text-2xl font-extrabold text-blue-950">
+              <h2 className="mt-4 text-2xl font-black text-brand-text-primary tracking-tight">
                 Forgot Password?
               </h2>
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-brand-text-secondary">
                 Enter your email address and we'll send you a 6-digit verification code.
               </p>
             </div>
 
             <form className="mt-6 space-y-5" onSubmit={requestOtpHandler}>
               <div>
-                <label className="block text-sm font-semibold text-gray-700" htmlFor="email-input">
+                <label className="block text-sm font-semibold text-brand-text-primary" htmlFor="email-input">
                   Email Address
                 </label>
                 <div className="mt-1 relative">
@@ -232,7 +238,7 @@ const ForgotPassword = () => {
                     type="email"
                     required
                     placeholder="name@example.com"
-                    className="appearance-none block w-full pl-10 pr-3 py-2.5 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors"
+                    className="appearance-none block w-full pl-10 pr-3 py-3 border border-gray-300 placeholder-gray-400 text-brand-text-primary rounded-brand-md focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent sm:text-sm transition-all shadow-sm bg-gray-50/30 hover:bg-gray-50/60 focus:bg-white"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
@@ -242,9 +248,16 @@ const ForgotPassword = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="group relative w-full flex justify-center py-2.5 px-4 border border-transparent text-sm font-semibold rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full flex justify-center items-center py-3 px-4 border border-transparent text-sm font-bold rounded-brand-md text-white bg-brand-primary hover:bg-brand-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary transition-all shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
               >
-                {isLoading ? 'Generating OTP...' : 'Send Verification Code'}
+                {isLoading ? (
+                  <>
+                    <RefreshCw className="animate-spin -ml-1 mr-2 h-4 w-4" />
+                    Generating OTP...
+                  </>
+                ) : (
+                  'Send Verification Code'
+                )}
               </button>
             </form>
           </>
@@ -254,20 +267,20 @@ const ForgotPassword = () => {
         {step === 2 && (
           <>
             <div className="text-center">
-              <div className="mx-auto h-12 w-12 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center shadow-inner">
-                <ShieldCheck size={24} />
+              <div className="mx-auto h-14 w-14 bg-brand-secondary text-brand-primary rounded-full flex items-center justify-center shadow-inner">
+                <ShieldCheck size={26} />
               </div>
-              <h2 className="mt-4 text-2xl font-extrabold text-blue-950">
+              <h2 className="mt-4 text-2xl font-black text-brand-text-primary tracking-tight">
                 Verify Code
               </h2>
-              <p className="mt-2 text-sm text-gray-500">
-                We sent a 6-digit code to <strong className="text-gray-700">{email}</strong>
+              <p className="mt-2 text-sm text-brand-text-secondary">
+                We sent a 6-digit code to <strong className="text-brand-text-primary font-semibold">{email}</strong>
               </p>
             </div>
 
-            {/* Development helper banner */}
+            {/* Development helper banner / Alert container */}
             {devOtpMsg && (
-              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-center">
+              <div className="bg-amber-50 border border-amber-200 rounded-brand-md p-4 text-center shadow-sm">
                 <span className="text-xs font-semibold text-amber-800">
                   ⚠️ Development Fallback:
                 </span>
@@ -279,7 +292,7 @@ const ForgotPassword = () => {
 
             <form className="mt-6 space-y-6" onSubmit={verifyOtpHandler}>
               <div>
-                <label className="block text-center text-sm font-semibold text-gray-700 mb-3">
+                <label className="block text-center text-sm font-semibold text-brand-text-primary mb-3">
                   Enter 6-digit code
                 </label>
                 
@@ -291,7 +304,7 @@ const ForgotPassword = () => {
                       ref={(el) => (otpInputsRef.current[idx] = el)}
                       type="text"
                       maxLength={1}
-                      className="w-12 h-12 text-center text-xl font-bold border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      className="w-12 h-12 text-center text-xl font-bold border border-gray-300 rounded-brand-md focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all bg-gray-50/30 hover:bg-gray-50/60 focus:bg-white"
                       value={digit}
                       onChange={(e) => handleOtpChange(idx, e.target.value)}
                       onKeyDown={(e) => handleOtpKeyDown(idx, e)}
@@ -302,11 +315,11 @@ const ForgotPassword = () => {
 
               {/* Countdown timer & Resend */}
               <div className="flex justify-between items-center text-xs">
-                <span className="text-gray-500 font-medium">
+                <span className="text-brand-text-secondary font-medium">
                   {timer > 0 ? (
-                    <span className="text-blue-600 font-semibold">Expires in: {formatTime(timer)}</span>
+                    <span className="text-brand-primary font-semibold">Expires in: {formatTime(timer)}</span>
                   ) : (
-                    <span className="text-red-500 font-semibold">Code expired</span>
+                    <span className="text-brand-danger font-semibold">Code expired</span>
                   )}
                 </span>
                 
@@ -314,7 +327,7 @@ const ForgotPassword = () => {
                   type="button"
                   disabled={timer > 0 || isLoading}
                   onClick={requestOtpHandler}
-                  className="font-semibold text-blue-600 hover:text-blue-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="font-semibold text-brand-primary hover:text-brand-primary-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   Resend Code
                 </button>
@@ -324,16 +337,23 @@ const ForgotPassword = () => {
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="flex-1 py-2.5 px-4 border border-gray-300 text-sm font-semibold rounded-lg text-gray-700 hover:bg-gray-50 transition-all"
+                  className="flex-1 py-3 px-4 border border-gray-300 text-sm font-bold rounded-brand-md text-brand-text-secondary hover:bg-gray-50 hover:text-brand-text-primary transition-all cursor-pointer bg-white"
                 >
                   Change Email
                 </button>
                 <button
                   type="submit"
                   disabled={isLoading || timer === 0}
-                  className="flex-1 py-2.5 px-4 border border-transparent text-sm font-semibold rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="flex-1 py-3 px-4 border border-transparent text-sm font-bold rounded-brand-md text-white bg-brand-primary hover:bg-brand-primary-hover transition-all disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
                 >
-                  {isLoading ? 'Verifying...' : 'Verify Code'}
+                  {isLoading ? (
+                    <>
+                      <RefreshCw className="animate-spin -ml-1 mr-2 h-4 w-4" />
+                      Verifying...
+                    </>
+                  ) : (
+                    'Verify Code'
+                  )}
                 </button>
               </div>
             </form>
@@ -344,20 +364,20 @@ const ForgotPassword = () => {
         {step === 3 && (
           <>
             <div className="text-center">
-              <div className="mx-auto h-12 w-12 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center shadow-inner">
-                <Lock size={24} />
+              <div className="mx-auto h-14 w-14 bg-brand-secondary text-brand-primary rounded-full flex items-center justify-center shadow-inner">
+                <Lock size={26} />
               </div>
-              <h2 className="mt-4 text-2xl font-extrabold text-blue-950">
+              <h2 className="mt-4 text-2xl font-black text-brand-text-primary tracking-tight">
                 New Password
               </h2>
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-brand-text-secondary">
                 Please enter and confirm your new secure password.
               </p>
             </div>
 
             <form className="mt-6 space-y-5" onSubmit={resetPasswordHandler}>
               <div>
-                <label className="block text-sm font-semibold text-gray-700" htmlFor="password-input">
+                <label className="block text-sm font-semibold text-brand-text-primary" htmlFor="password-input">
                   New Password
                 </label>
                 <div className="mt-1 relative">
@@ -365,13 +385,14 @@ const ForgotPassword = () => {
                     id="password-input"
                     type={showPassword ? 'text' : 'password'}
                     required
-                    className="appearance-none block w-full px-3 py-2.5 pr-10 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors"
+                    placeholder="••••••••"
+                    className="appearance-none block w-full px-3 py-3 pr-10 border border-gray-300 placeholder-gray-400 text-brand-text-primary rounded-brand-md focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent sm:text-sm transition-all shadow-sm bg-gray-50/30 hover:bg-gray-50/60 focus:bg-white"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
                   <button
                     type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -380,7 +401,7 @@ const ForgotPassword = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700" htmlFor="confirm-password-input">
+                <label className="block text-sm font-semibold text-brand-text-primary" htmlFor="confirm-password-input">
                   Confirm Password
                 </label>
                 <div className="mt-1 relative">
@@ -388,13 +409,14 @@ const ForgotPassword = () => {
                     id="confirm-password-input"
                     type={showConfirmPassword ? 'text' : 'password'}
                     required
-                    className="appearance-none block w-full px-3 py-2.5 pr-10 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors"
+                    placeholder="••••••••"
+                    className="appearance-none block w-full px-3 py-3 pr-10 border border-gray-300 placeholder-gray-400 text-brand-text-primary rounded-brand-md focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent sm:text-sm transition-all shadow-sm bg-gray-50/30 hover:bg-gray-50/60 focus:bg-white"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   />
                   <button
                     type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
                     {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -412,18 +434,18 @@ const ForgotPassword = () => {
                         className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
                           password.length >= level * 3
                             ? level <= 1
-                              ? 'bg-red-400'
+                              ? 'bg-brand-danger'
                               : level <= 2
-                              ? 'bg-orange-400'
+                              ? 'bg-amber-400'
                               : level <= 3
                               ? 'bg-yellow-400'
-                              : 'bg-green-400'
+                              : 'bg-brand-success'
                             : 'bg-gray-200'
                         }`}
                       />
                     ))}
                   </div>
-                  <p className="text-xs text-gray-500 font-medium">
+                  <p className="text-xs text-brand-text-secondary font-medium">
                     {password.length < 6
                       ? 'Too short'
                       : password.length < 8
@@ -438,9 +460,16 @@ const ForgotPassword = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="group relative w-full flex justify-center py-2.5 px-4 border border-transparent text-sm font-semibold rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full flex justify-center items-center py-3 px-4 border border-transparent text-sm font-bold rounded-brand-md text-white bg-brand-primary hover:bg-brand-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary transition-all shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
               >
-                {isLoading ? 'Resetting password...' : 'Reset Password'}
+                {isLoading ? (
+                  <>
+                    <RefreshCw className="animate-spin -ml-1 mr-2 h-4 w-4" />
+                    Resetting password...
+                  </>
+                ) : (
+                  'Reset Password'
+                )}
               </button>
             </form>
           </>
@@ -449,7 +478,7 @@ const ForgotPassword = () => {
         {/* STEP 4: SUCCESS PAGE */}
         {step === 4 && (
           <div className="text-center py-4">
-            <div className="mx-auto h-16 w-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-4 shadow-inner animate-bounce">
+            <div className="mx-auto h-16 w-16 bg-brand-success/15 text-brand-success rounded-full flex items-center justify-center mb-4 shadow-inner animate-bounce">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-8 w-8"
@@ -457,11 +486,11 @@ const ForgotPassword = () => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h2 className="text-2xl font-extrabold text-blue-950">Success!</h2>
-            <p className="mt-2 text-sm text-gray-600 font-medium">
+            <h2 className="text-2xl font-black text-brand-text-primary tracking-tight">Success!</h2>
+            <p className="mt-2 text-sm text-brand-text-secondary font-medium">
               Your password has been successfully reset.
             </p>
             <p className="text-xs text-gray-400 mt-2">
@@ -475,14 +504,14 @@ const ForgotPassword = () => {
           <div className="text-center mt-4">
             <Link
               to="/login"
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-primary hover:text-brand-primary-hover transition-colors"
             >
               <ArrowLeft size={14} />
               Back to Sign In
             </Link>
           </div>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 };
