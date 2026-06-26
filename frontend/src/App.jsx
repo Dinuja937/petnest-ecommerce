@@ -20,6 +20,7 @@ import ProductDetails from './pages/ProductDetails';
 import ScrollToTop from './components/ScrollToTop';
 import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentCancel from './pages/PaymentCancel';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
           <Route path="product/:id" element={<ProductDetails />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/payment-cancel" element={<PaymentCancel />} />
+          <Route path="*" element={<NotFound />} />
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
