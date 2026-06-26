@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import api from '../services/api';
+import useProduct from '../hooks/useProduct';
 import ProductCard from '../components/products/ProductCard';
 import { Filter, Search, RotateCcw, AlertCircle, ShoppingBag } from 'lucide-react';
 
@@ -8,30 +8,14 @@ const ProductList = () => {
   const { category: urlCategory } = useParams();
   const navigate = useNavigate();
 
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { products, loading, error, fetchProducts } = useProduct();
   const [searchQuery, setSearchQuery] = useState('');
 
   const categories = ['All', 'Dogs', 'Cats', 'Birds'];
 
-  const fetchProducts = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const { data } = await api.get('/products');
-      setProducts(data);
-    } catch (err) {
-      console.error(err);
-      setError(err.response?.data?.message || 'Failed to load products. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [fetchProducts]);
 
   const filteredProducts = products.filter((product) => {
     const matchesCategory =

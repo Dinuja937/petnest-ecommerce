@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import api from '../services/api';
-import { addToCart, clearCartItems } from '../store/slices/cartSlice';
+import { useDispatch } from 'react-redux';
+import useAuth from '../hooks/useAuth';
+import useProduct from '../hooks/useProduct';
+import { addToCart } from '../store/slices/cartSlice';
 import { ShoppingCart, ArrowLeft, ShieldCheck, Heart, Info, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -11,30 +12,13 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { userInfo } = useSelector((state) => state.auth);
-
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { userInfo } = useAuth();
+  const { product, loading, error, fetchProduct } = useProduct();
   const [qty, setQty] = useState(1);
 
-  const fetchProduct = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const { data } = await api.get(`/products/${id}`);
-      setProduct(data);
-    } catch (err) {
-      console.error(err);
-      setError(err.response?.data?.message || 'Product could not be retrieved.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchProduct();
-  }, [id]);
+    fetchProduct(id);
+  }, [id, fetchProduct]);
 
   const addToCartHandler = () => {
     if (!userInfo) {
