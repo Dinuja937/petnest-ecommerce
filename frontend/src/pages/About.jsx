@@ -1,5 +1,6 @@
 import { Award, Headphones, HeartHandshake, PackageCheck, ShieldCheck, Truck } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import birdsImage from '../assets/birds_category.jpg';
 import catsImage from '../assets/cats_category.jpg';
 import dogsImage from '../assets/dogs_category.jpg';
@@ -35,158 +36,205 @@ const highlights = [
 const productGroups = [
   {
     image: dogsImage,
-    title: 'For dogs',
+    title: 'For Dogs',
     description: 'Food, treats, toys, collars, beds, bowls, and grooming essentials.',
   },
   {
     image: catsImage,
-    title: 'For cats',
+    title: 'For Cats',
     description: 'Food, litter, treats, scratching products, toys, and accessories.',
   },
   {
     image: birdsImage,
-    title: 'For birds',
+    title: 'For Birds',
     description: 'Food, cages, perches, feeders, and everyday care items.',
   },
 ];
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  show: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, delay: i * 0.08 },
+  }),
+};
+
 const About = () => {
   return (
-    <main className="w-full min-h-screen bg-linear-to-b from-blue-50/40 via-white to-white py-12 sm:py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <section className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-14 items-center mb-16">
-          <div className="space-y-6">
-            <span className="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-blue-800 bg-blue-100 rounded-full">
-              <HeartHandshake className="w-3.5 h-3.5" />
-              About PetNest
-            </span>
+    <main className="w-full min-h-screen bg-linear-to-b from-brand-secondary/50 via-white to-white">
+      {/* ── Hero Section ───────────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          className="space-y-7"
+        >
+          <span className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-primary bg-brand-secondary rounded-full border border-brand-border">
+            <HeartHandshake className="w-3.5 h-3.5" />
+            About PetNest
+          </span>
 
-            <div className="space-y-4">
-              <h1 className="text-4xl sm:text-5xl font-extrabold text-blue-950 tracking-tight leading-tight">
-                Sri Lanka&apos;s friendly online pet store for everyday pet care.
-              </h1>
-              <p className="text-lg text-blue-900/70 leading-relaxed">
-                PetNest brings pet food, supplies, and care essentials into one simple shopping
-                experience for pet parents who want reliable products without the extra hassle.
-              </p>
-              <p className="text-base text-blue-900/65 leading-relaxed">
-                Inspired by the best local pet stores, we are building PetNest around practical
-                product choices, clear information, convenient delivery, and service that treats
-                every pet like family.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap gap-3 pt-2">
-              <Link
-                to="/shop"
-                className="inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-600/20 transition-colors"
-              >
-                Shop pet products
-              </Link>
-              <Link
-                to="/contact"
-                className="inline-flex items-center justify-center px-6 py-3 bg-white hover:bg-blue-50 text-blue-700 font-semibold rounded-xl border border-blue-100 transition-colors"
-              >
-                Contact support
-              </Link>
-            </div>
-          </div>
-
-          <div className="relative rounded-2xl overflow-hidden shadow-xl border border-blue-100 bg-blue-950 min-h-107.5">
-            <img
-              src={bannerImage}
-              alt="Happy pets with PetNest supplies"
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-linear-to-t from-blue-950 via-blue-950/70 to-blue-950/10" />
-
-            <div className="relative z-10 p-7 sm:p-9 text-white max-w-md">
-              <div className="w-14 h-14 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center text-blue-100 mb-6">
-                <ShieldCheck className="w-7 h-7" />
-              </div>
-
-              <div className="space-y-3">
-                <h2 className="text-2xl font-bold tracking-tight">Our promise</h2>
-                <p className="text-blue-100/80 leading-relaxed">
-                  To make pet shopping easier, more dependable, and more caring, from the first
-                  product search to the moment your order reaches your door.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                {['Trusted supplies', 'Clear choices', 'Pet-parent support'].map((item) => (
-                  <div key={item} className="rounded-xl bg-white/15 backdrop-blur-sm border border-white/15 p-4">
-                    <p className="text-sm font-semibold text-blue-50 leading-snug">{item}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {highlights.map((highlight) => (
-            <article
-              key={highlight.title}
-              className="bg-white p-7 rounded-xl border border-blue-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300"
-            >
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 mb-5">
-                <highlight.icon className="w-6 h-6" />
-              </div>
-              <h3 className="text-lg font-bold text-blue-950 mb-3">{highlight.title}</h3>
-              <p className="text-blue-900/60 text-sm leading-relaxed">{highlight.description}</p>
-            </article>
-          ))}
-        </section>
-
-        <section className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] gap-8 lg:gap-10 mb-16">
-          <div className="bg-blue-50 border border-blue-100 rounded-2xl p-8 sm:p-10">
-            <span className="text-sm font-semibold uppercase tracking-wider text-blue-600">
-              What we offer
-            </span>
-            <h2 className="mt-3 text-3xl font-extrabold text-blue-950 tracking-tight">
-              Built for real pet-parent routines.
-            </h2>
-            <p className="mt-4 text-blue-900/65 leading-relaxed">
-              Whether you are restocking food, buying treats, replacing accessories, or browsing
-              care products, PetNest is designed to help you find the right item faster.
+          <div className="space-y-5">
+            <h1 className="text-4xl sm:text-5xl font-black text-brand-text-primary tracking-tight leading-tight">
+              Sri Lanka&apos;s friendly online pet store for everyday pet care.
+            </h1>
+            <p className="text-lg text-brand-text-secondary leading-relaxed">
+              PetNest brings pet food, supplies, and care essentials into one simple shopping
+              experience for pet parents who want reliable products without the extra hassle.
+            </p>
+            <p className="text-base text-brand-text-secondary leading-relaxed">
+              Inspired by the best local pet stores, we are building PetNest around practical
+              product choices, clear information, convenient delivery, and service that treats
+              every pet like family.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {productGroups.map((group) => (
-                <article
-                  key={group.title}
-                  className="bg-white border border-blue-100 rounded-xl overflow-hidden shadow-sm"
-                >
-                  <img
-                    src={group.image}
-                    alt={`${group.title} pet supplies`}
-                    className="h-40 w-full object-cover"
-                  />
-                  <div className="p-5">
-                    <h3 className="font-bold text-blue-950">{group.title}</h3>
-                    <p className="mt-2 text-sm text-blue-900/65 leading-relaxed">
-                      {group.description}
-                    </p>
-                  </div>
-                </article>
-              ))}
+          <div className="flex flex-wrap gap-3 pt-1">
+            <Link
+              to="/shop"
+              className="inline-flex items-center justify-center px-7 py-3.5 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-brand-md shadow-md hover:shadow-lg transition-all cursor-pointer"
+            >
+              Shop Pet Products
+            </Link>
+            <Link
+              to="/contact"
+              className="inline-flex items-center justify-center px-7 py-3.5 bg-white hover:bg-brand-secondary text-brand-primary font-bold rounded-brand-md border border-brand-border hover:border-brand-primary transition-all cursor-pointer"
+            >
+              Contact Support
+            </Link>
           </div>
-        </section>
+        </motion.div>
 
-        <section className="bg-white border border-blue-100 rounded-2xl p-8 sm:p-10 lg:p-12 shadow-sm">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          custom={1}
+          className="relative rounded-brand-lg overflow-hidden border border-brand-border shadow-brand-soft bg-brand-text-primary min-h-[430px]"
+        >
+          <img
+            src={bannerImage}
+            alt="Happy pets with PetNest supplies"
+            className="absolute inset-0 w-full h-full object-cover opacity-70"
+          />
+          <div className="absolute inset-0 bg-linear-to-t from-brand-text-primary via-brand-text-primary/60 to-transparent" />
+
+          <div className="relative z-10 p-8 sm:p-10 text-white flex flex-col h-full justify-end">
+            <div className="w-12 h-12 rounded-brand-md bg-white/15 backdrop-blur-sm flex items-center justify-center text-blue-100 mb-5">
+              <ShieldCheck className="w-6 h-6" />
+            </div>
+            <h2 className="text-2xl font-black tracking-tight mb-2">Our Promise</h2>
+            <p className="text-white/75 leading-relaxed text-sm mb-6">
+              To make pet shopping easier, more dependable, and more caring — from the first
+              product search to the moment your order reaches your door.
+            </p>
+            <div className="grid grid-cols-3 gap-3">
+              {['Trusted Supplies', 'Clear Choices', 'Pet-Parent Support'].map((item) => (
+                <div key={item} className="rounded-brand-md bg-white/15 backdrop-blur-sm border border-white/15 p-3">
+                  <p className="text-xs font-bold text-blue-50 leading-snug">{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* ── Highlights Grid ─────────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        <div className="text-center mb-12">
+          <span className="text-xs font-bold uppercase tracking-widest text-brand-primary">Why PetNest</span>
+          <h2 className="mt-2 text-3xl font-black text-brand-text-primary tracking-tight">
+            Everything your pet needs, all in one place.
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {highlights.map((h, i) => (
+            <motion.article
+              key={h.title}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="show"
+              custom={i}
+              viewport={{ once: true }}
+              className="bg-brand-card-background p-7 rounded-brand-lg border border-brand-border shadow-brand-soft hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+            >
+              <div className="w-12 h-12 bg-brand-secondary rounded-brand-md flex items-center justify-center text-brand-primary mb-5 border border-brand-border">
+                <h.icon className="w-6 h-6" />
+              </div>
+              <h3 className="text-base font-black text-brand-text-primary mb-2 tracking-tight">{h.title}</h3>
+              <p className="text-brand-text-secondary text-sm leading-relaxed">{h.description}</p>
+            </motion.article>
+          ))}
+        </div>
+      </section>
+
+      {/* ── What We Offer ───────────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] gap-8 lg:gap-10">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="bg-brand-secondary border border-brand-border rounded-brand-lg p-8 sm:p-10 flex flex-col justify-center"
+        >
+          <span className="text-xs font-bold uppercase tracking-widest text-brand-primary mb-3">What We Offer</span>
+          <h2 className="text-3xl font-black text-brand-text-primary tracking-tight mb-4">
+            Built for real pet-parent routines.
+          </h2>
+          <p className="text-brand-text-secondary leading-relaxed text-sm">
+            Whether you are restocking food, buying treats, replacing accessories, or browsing
+            care products, PetNest is designed to help you find the right item faster.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          {productGroups.map((group, i) => (
+            <motion.article
+              key={group.title}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="show"
+              custom={i}
+              viewport={{ once: true }}
+              className="bg-brand-card-background border border-brand-border rounded-brand-lg overflow-hidden shadow-brand-soft hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+            >
+              <div className="overflow-hidden h-44">
+                <img
+                  src={group.image}
+                  alt={`${group.title} pet supplies`}
+                  className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <div className="p-5">
+                <h3 className="font-black text-brand-text-primary text-sm tracking-tight">{group.title}</h3>
+                <p className="mt-2 text-xs text-brand-text-secondary leading-relaxed">
+                  {group.description}
+                </p>
+              </div>
+            </motion.article>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Mission Section ─────────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="bg-brand-card-background border border-brand-border rounded-brand-lg p-8 sm:p-10 lg:p-12 shadow-brand-soft"
+        >
           <div className="grid grid-cols-1 lg:grid-cols-[0.8fr_1.2fr] gap-8 lg:gap-12">
             <div>
-              <span className="text-sm font-semibold uppercase tracking-wider text-blue-600">
-                Our mission
-              </span>
-              <h2 className="mt-3 text-3xl font-extrabold text-blue-950 tracking-tight">
+              <span className="text-xs font-bold uppercase tracking-widest text-brand-primary">Our Mission</span>
+              <h2 className="mt-3 text-3xl font-black text-brand-text-primary tracking-tight leading-snug">
                 Better shopping for healthier, happier pets.
               </h2>
             </div>
-
-            <div className="space-y-5 text-blue-900/70 leading-relaxed">
+            <div className="space-y-5 text-brand-text-secondary leading-relaxed text-sm md:text-base">
               <p>
                 We want PetNest to feel like a dependable local pet shop online: easy to browse,
                 helpful when you need guidance, and focused on products that support pets through
@@ -198,8 +246,8 @@ const About = () => {
               </p>
             </div>
           </div>
-        </section>
-      </div>
+        </motion.div>
+      </section>
     </main>
   );
 };
