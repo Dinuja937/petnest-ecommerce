@@ -9,11 +9,13 @@ import {
   UserCheck,
   Users,
   X,
+  User,
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCredentials } from '../store/slices/authSlice';
 import api from '../services/api';
 import toast from 'react-hot-toast';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const emptyForm = {
   name: '',
@@ -54,9 +56,9 @@ const UserManagement = () => {
     const customers = users.filter((user) => user.role === 'user').length;
 
     return [
-      { label: 'Total Users', value: users.length, icon: Users },
-      { label: 'Customers', value: customers, icon: UserCheck },
-      { label: 'Admins', value: admins, icon: ShieldCheck },
+      { label: 'Total Users', value: users.length, icon: Users, colorClass: 'bg-blue-100 text-blue-700 border-blue-200' },
+      { label: 'Customers', value: customers, icon: UserCheck, colorClass: 'bg-green-100 text-green-700 border-green-200' },
+      { label: 'Admins', value: admins, icon: ShieldCheck, colorClass: 'bg-purple-100 text-purple-700 border-purple-200' },
     ];
   }, [users]);
 
@@ -88,7 +90,6 @@ const UserManagement = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setFormData((current) => ({
       ...current,
       [name]: value,
@@ -97,7 +98,6 @@ const UserManagement = () => {
 
   const handleUpdateUser = async (e) => {
     e.preventDefault();
-
     if (!selectedUser) return;
 
     try {
@@ -149,150 +149,173 @@ const UserManagement = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-6">
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="max-w-7xl mx-auto space-y-6 pb-12"
+    >
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-blue-950 flex items-center gap-3">
-            <Users className="w-8 h-8 text-blue-700" />
+          <h1 className="text-3xl font-black text-brand-text-primary tracking-tight flex items-center gap-3">
+            <Users className="w-8 h-8 text-brand-primary" />
             User Management
           </h1>
-          <p className="text-gray-600 mt-2">
-            Manage customer accounts, admin access, and user profile details.
+          <p className="text-brand-text-secondary text-sm mt-1">
+            Manage customer accounts, update access levels, and audit active users.
           </p>
         </div>
 
         <button
           onClick={fetchUsers}
           disabled={loading}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 disabled:opacity-60 transition-colors"
+          className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-brand-md bg-brand-secondary text-brand-primary font-bold border border-brand-border hover:border-brand-primary transition-all cursor-pointer disabled:opacity-60 disabled:pointer-events-none"
         >
           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-          Refresh
+          Refresh Data
         </button>
       </div>
 
-      <section className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {stats.map((stat) => (
-          <article key={stat.label} className="bg-white border border-blue-100 rounded-xl p-5 shadow-sm">
+      {/* Stats row */}
+      <section className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        {stats.map((stat, i) => (
+          <motion.article
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.05, duration: 0.3 }}
+            key={stat.label}
+            className="bg-brand-card-background border border-brand-border rounded-brand-lg p-5 shadow-brand-soft"
+          >
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-sm text-gray-500">{stat.label}</p>
-                <p className="text-3xl font-extrabold text-blue-950 mt-1">{stat.value}</p>
+                <p className="text-xs font-bold text-brand-text-secondary uppercase tracking-wider">{stat.label}</p>
+                <p className="text-3xl font-black text-brand-text-primary mt-1.5">{stat.value}</p>
               </div>
-              <div className="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
-                <stat.icon className="w-6 h-6" />
+              <div className={`w-12 h-12 rounded-brand-md border flex items-center justify-center ${stat.colorClass}`}>
+                <stat.icon className="w-5 h-5" />
               </div>
             </div>
-          </article>
+          </motion.article>
         ))}
       </section>
 
-      <section className="bg-white rounded-2xl border border-blue-100 shadow-sm overflow-hidden">
-        <div className="p-5 border-b border-blue-50 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      {/* User table grid */}
+      <section className="bg-brand-card-background rounded-brand-lg border border-brand-border shadow-brand-soft overflow-hidden">
+        <div className="p-5 border-b border-brand-border flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h2 className="text-xl font-bold text-blue-950">All Users</h2>
-            <p className="text-sm text-gray-500 mt-1">
-              View users, update roles, or remove inactive accounts.
+            <h2 className="text-lg font-black text-brand-text-primary tracking-tight">Active Accounts</h2>
+            <p className="text-xs text-brand-text-secondary mt-0.5">
+              Role permissions and status profiles
             </p>
           </div>
 
-          <div className="relative w-full lg:w-80">
-            <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <div className="relative w-full md:w-80">
+            <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="search"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search users..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-blue-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none text-sm"
+              placeholder="Search by name, email, or role..."
+              className="w-full pl-10 pr-4 py-2.5 rounded-brand-md border border-gray-300 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none text-xs text-brand-text-primary"
             />
           </div>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-blue-50">
-            <thead className="bg-blue-50/70">
+          <table className="min-w-full divide-y divide-brand-border">
+            <thead className="bg-gray-50/50">
               <tr>
-                <th className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wider text-blue-900">
-                  User
+                <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-brand-text-secondary">
+                  User Details
                 </th>
-                <th className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wider text-blue-900">
+                <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-brand-text-secondary">
                   Email
                 </th>
-                <th className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wider text-blue-900">
-                  Role
+                <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-brand-text-secondary">
+                  Access Level
                 </th>
-                <th className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wider text-blue-900">
-                  Joined
+                <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-brand-text-secondary">
+                  Date Joined
                 </th>
-                <th className="px-5 py-3 text-right text-xs font-bold uppercase tracking-wider text-blue-900">
+                <th className="px-6 py-3.5 text-right text-xs font-bold uppercase tracking-wider text-brand-text-secondary">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-blue-50">
+            <tbody className="divide-y divide-brand-border bg-white">
               {loading ? (
                 <tr>
-                  <td colSpan="5" className="px-5 py-12 text-center text-gray-500">
-                    Loading users...
+                  <td colSpan="5" className="px-6 py-12 text-center text-brand-text-secondary font-medium">
+                    <div className="flex items-center justify-center gap-2">
+                      <RefreshCw className="animate-spin text-brand-primary w-5 h-5" />
+                      Loading user accounts...
+                    </div>
                   </td>
                 </tr>
               ) : filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="px-5 py-12 text-center text-gray-500">
-                    No users found.
+                  <td colSpan="5" className="px-6 py-12 text-center text-brand-text-secondary text-sm">
+                    No users found matching your search.
                   </td>
                 </tr>
               ) : (
                 filteredUsers.map((user) => (
-                  <tr key={user._id} className="hover:bg-blue-50/40 transition-colors">
-                    <td className="px-5 py-4">
+                  <tr key={user._id} className="hover:bg-gray-50/40 transition-colors">
+                    <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
-                          {user.name?.charAt(0)?.toUpperCase() || 'U'}
+                        <div className="w-10 h-10 rounded-full bg-brand-secondary text-brand-primary border border-brand-primary/10 flex items-center justify-center font-black text-sm uppercase">
+                          {user.name?.charAt(0) || 'U'}
                         </div>
                         <div>
-                          <p className="font-semibold text-blue-950">{user.name}</p>
+                          <p className="font-bold text-brand-text-primary text-sm leading-snug">{user.name}</p>
                           {user._id === userInfo?._id && (
-                            <p className="text-xs text-blue-600 mt-0.5">Current admin</p>
+                            <span className="inline-block mt-0.5 px-2 py-0.5 bg-brand-primary/10 text-brand-primary text-[9px] font-black uppercase tracking-wider rounded-full border border-brand-primary/20">
+                              Current session
+                            </span>
                           )}
                         </div>
                       </div>
                     </td>
-                    <td className="px-5 py-4 text-sm text-gray-600">
+                    <td className="px-6 py-4 text-sm text-brand-text-secondary">
                       <span className="inline-flex items-center gap-2">
                         <Mail className="w-4 h-4 text-gray-400" />
                         {user.email}
                       </span>
                     </td>
-                    <td className="px-5 py-4">
+                    <td className="px-6 py-4">
                       <span
-                        className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${
+                        className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold border ${
                           user.role === 'admin'
-                            ? 'bg-blue-100 text-blue-800'
-                            : 'bg-green-100 text-green-800'
+                            ? 'bg-purple-50 text-purple-700 border-purple-100'
+                            : 'bg-green-50 text-green-700 border-green-100'
                         }`}
                       >
-                        {user.role === 'admin' ? 'Admin' : 'Customer'}
+                        {user.role === 'admin' ? 'Administrator' : 'Customer'}
                       </span>
                     </td>
-                    <td className="px-5 py-4 text-sm text-gray-600">
-                      {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
+                    <td className="px-6 py-4 text-xs font-medium text-brand-text-secondary">
+                      {user.createdAt ? new Date(user.createdAt).toLocaleDateString(undefined, {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                      }) : 'N/A'}
                     </td>
-                    <td className="px-5 py-4">
+                    <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => openEditModal(user)}
-                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 text-sm font-semibold transition-colors"
+                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-brand-md bg-brand-secondary text-brand-primary hover:border-brand-primary border border-transparent text-xs font-bold transition-all cursor-pointer"
                         >
-                          <Edit3 className="w-4 h-4" />
-                          Edit
+                          <Edit3 className="w-3.5 h-3.5" />
+                          Edit Role
                         </button>
                         <button
                           onClick={() => handleDeleteUser(user)}
                           disabled={deletingId === user._id || user._id === userInfo?._id}
-                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-red-50 text-red-700 hover:bg-red-100 text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-brand-md bg-brand-danger/10 text-brand-danger hover:bg-brand-danger hover:text-white text-xs font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-3.5 h-3.5" />
                           {deletingId === user._id ? 'Deleting...' : 'Delete'}
                         </button>
                       </div>
@@ -305,98 +328,106 @@ const UserManagement = () => {
         </div>
       </section>
 
-      {selectedUser && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center px-4">
-          <div className="bg-white rounded-2xl shadow-xl border border-blue-100 w-full max-w-lg overflow-hidden">
-            <div className="p-6 border-b border-blue-50 flex items-center justify-between gap-4">
-              <div>
-                <h2 className="text-xl font-bold text-blue-950">Edit User</h2>
-                <p className="text-sm text-gray-500 mt-1">Update account details and access level.</p>
-              </div>
-              <button
-                type="button"
-                onClick={closeEditModal}
-                className="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600"
-                aria-label="Close edit user modal"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <form onSubmit={handleUpdateUser} className="p-6 space-y-5">
-              <div className="space-y-2">
-                <label htmlFor="name" className="text-sm font-semibold text-blue-950">
-                  Full Name
-                </label>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 rounded-xl border border-blue-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none text-sm"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-semibold text-blue-950">
-                  Email Address
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 rounded-xl border border-blue-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none text-sm"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="role" className="text-sm font-semibold text-blue-950">
-                  Role
-                </label>
-                <select
-                  id="role"
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-                  disabled={selectedUser._id === userInfo?._id}
-                  className="w-full px-4 py-3 rounded-xl border border-blue-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none text-sm bg-white"
-                >
-                  <option value="user">Customer</option>
-                  <option value="admin">Admin</option>
-                </select>
-                {selectedUser._id === userInfo?._id && (
-                  <p className="text-xs text-gray-500">
-                    Your own admin role cannot be changed from this screen.
-                  </p>
-                )}
-              </div>
-
-              <div className="flex flex-col sm:flex-row justify-end gap-3 pt-2">
+      {/* Edit User Modal overlay */}
+      <AnimatePresence>
+        {selectedUser && (
+          <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-brand-card-background rounded-brand-lg shadow-brand-soft border border-brand-border w-full max-w-md overflow-hidden"
+            >
+              <div className="p-6 border-b border-brand-border flex items-center justify-between">
+                <div>
+                  <h2 className="text-lg font-black text-brand-text-primary">Edit Account Settings</h2>
+                  <p className="text-xs text-brand-text-secondary mt-0.5">Manage permissions for {selectedUser.name}</p>
+                </div>
                 <button
                   type="button"
                   onClick={closeEditModal}
-                  className="px-5 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold transition-colors"
+                  className="w-9 h-9 rounded-brand-md bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 cursor-pointer"
+                  aria-label="Close modal"
                 >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors disabled:opacity-60"
-                >
-                  {saving ? 'Saving...' : 'Save Changes'}
+                  <X className="w-4.5 h-4.5" />
                 </button>
               </div>
-            </form>
+
+              <form onSubmit={handleUpdateUser} className="p-6 space-y-4">
+                <div className="space-y-1.5">
+                  <label htmlFor="name" className="text-xs font-bold uppercase tracking-wider text-brand-text-primary">
+                    Name
+                  </label>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 rounded-brand-md border border-gray-300 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none text-sm text-brand-text-primary"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label htmlFor="email" className="text-xs font-bold uppercase tracking-wider text-brand-text-primary">
+                    Email
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 rounded-brand-md border border-gray-300 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none text-sm text-brand-text-primary"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label htmlFor="role" className="text-xs font-bold uppercase tracking-wider text-brand-text-primary">
+                    Access Level Group
+                  </label>
+                  <select
+                    id="role"
+                    name="role"
+                    value={formData.role}
+                    onChange={handleChange}
+                    disabled={selectedUser._id === userInfo?._id}
+                    className="w-full px-4 py-3 rounded-brand-md border border-gray-300 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none text-sm text-brand-text-primary bg-white cursor-pointer"
+                  >
+                    <option value="user">Customer</option>
+                    <option value="admin">Administrator</option>
+                  </select>
+                  {selectedUser._id === userInfo?._id && (
+                    <p className="text-[11px] text-brand-danger font-medium">
+                      You cannot demote your own active administrator profile.
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex gap-3 pt-3">
+                  <button
+                    type="button"
+                    onClick={closeEditModal}
+                    className="flex-1 py-3 rounded-brand-md bg-gray-100 hover:bg-gray-200 text-brand-text-primary font-bold text-sm transition-colors cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={saving}
+                    className="flex-1 py-3 rounded-brand-md bg-brand-primary hover:bg-brand-primary-hover text-white font-bold text-sm shadow-md hover:shadow-lg transition-all cursor-pointer disabled:opacity-50"
+                  >
+                    {saving ? 'Saving changes...' : 'Save Settings'}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 };
 
