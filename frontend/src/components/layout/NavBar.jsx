@@ -69,8 +69,19 @@ const NavBar = () => {
           {/* Auth Section */}
           {userInfo ? (
             <>
-              <NavLink to="/profile" className={linkClass}>
-                {userInfo.name}
+              <NavLink to="/profile" className={(props) => `${linkClass(props)} flex items-center gap-2 py-1.5`}>
+                {userInfo.profilePicture ? (
+                  <img
+                    src={userInfo.profilePicture}
+                    alt="avatar"
+                    className="w-7 h-7 rounded-full object-cover border border-brand-border shrink-0"
+                  />
+                ) : (
+                  <span className="w-7 h-7 rounded-full bg-brand-primary text-white flex items-center justify-center font-bold text-xs shrink-0 border border-brand-primary/30">
+                    {userInfo.name?.charAt(0)?.toUpperCase() || '?'}
+                  </span>
+                )}
+                <span className="max-w-[90px] truncate">{userInfo.name}</span>
               </NavLink>
               {userInfo.role === 'admin' && (
                 <NavLink to="/admin" className={linkClass}>
