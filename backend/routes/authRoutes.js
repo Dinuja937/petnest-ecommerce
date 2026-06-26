@@ -28,7 +28,9 @@ router.put('/reset-password', resetPassword);
 router.post('/send-otp', sendOtp);
 router.post('/verify-otp', verifyOtp);
 
-router.route('/profile').get(protect, getUserProfile).put(protect, updateUserProfile);
+import upload from '../utils/uploadHelper.js';
+
+router.route('/profile').get(protect, getUserProfile).put(protect, upload.single('image'), updateUserProfile);
 
 router.route('/users').get(protect, admin, getUsers);
 router.route('/users/:id')

@@ -1,6 +1,41 @@
 import User from '../models/User.js';
 import generateToken from '../utils/generateToken.js';
 import crypto from 'crypto';
+import cloudinary from '../config/cloudinary.js';
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const uploadDir = path.join(__dirname, '..', 'uploads', 'avatars');
+
+const uploadImageFileToCloudinary = async (file) => {
+  const dataUri = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
+  const result = await cloudinary.uploader.upload(dataUri, {
+    folder: 'petnest/avatars',
+    resource_type: 'image',
+  });
+  return result.secure_url;
+};
+
+const saveImageFileLocally = async (file, req) => {
+  await fs.mkdir(uploadDir, { recursive: true });
+  const filename = `${Date.now()}-${crypto.randomBytes(8).toString('hex')}${path.extname(file.originalname || '').toLowerCase() || '.jpg'}`;
+  const targetPath = path.join(uploadDir, filename);
+  await fs.writeFile(targetPath, file.buffer);
+  return `${req.protocol}://${req.get('host')}/uploads/avatars/${filename}`;
+};
+
+const resolveProfileImage = async (file, req) => {
+  try {
+    return await uploadImageFileToCloudinary(file);
+  } catch (error) {
+    console.error('Cloudinary avatar upload failed, saving locally:', error.message);
+    return await saveImageFileLocally(file, req);
+  }
+};
+
 
 // @desc    Register a new user
 // @route   POST /api/auth/register
@@ -24,6 +59,7 @@ export const registerUser = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        profilePicture: user.profilePicture || '',
         token,
       });
     } else {
@@ -50,6 +86,7 @@ export const authUser = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        profilePicture: user.profilePicture || '',
         token,
       });
     } else {
@@ -79,7 +116,13 @@ export const getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     if (user) {
-      res.json({ _id: user._id, name: user.name, email: user.email, role: user.role });
+      res.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        profilePicture: user.profilePicture || '',
+      });
     } else {
       res.status(404).json({ message: 'User not found' });
     }
@@ -98,12 +141,20 @@ export const updateUserProfile = async (req, res) => {
       user.name = req.body.name || user.name;
       user.email = req.body.email || user.email;
       if (req.body.password) user.password = req.body.password;
+
+      if (req.file) {
+        user.profilePicture = await resolveProfileImage(req.file, req);
+      } else if (req.body.profilePicture !== undefined) {
+        user.profilePicture = req.body.profilePicture;
+      }
+
       const updatedUser = await user.save();
       res.json({
         _id: updatedUser._id,
         name: updatedUser.name,
         email: updatedUser.email,
         role: updatedUser.role,
+        profilePicture: updatedUser.profilePicture || '',
       });
     } else {
       res.status(404).json({ message: 'User not found' });
