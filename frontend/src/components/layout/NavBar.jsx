@@ -1,27 +1,23 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../../store/slices/authSlice';
-import { clearCartItems } from '../../store/slices/cartSlice';
+import { useSelector } from 'react-redux';
+import useAuth from '../../hooks/useAuth';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
 import { ShoppingCart } from 'lucide-react';
 const NavBar = () => {
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo, logout } = useAuth();
   const { cartItems } = useSelector((state) => state.cart);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const logoutHandler = async () => {
     try {
       await api.post('/auth/logout');
-      dispatch(logout());
-      dispatch(clearCartItems());
+      logout();
       toast.success('Logged out successfully');
       navigate('/');
     } catch (error) {
       console.error(error);
-      dispatch(logout());
-      dispatch(clearCartItems());
+      logout();
       toast.success('Logged out successfully');
       navigate('/');
     }
