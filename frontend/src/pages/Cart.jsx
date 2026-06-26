@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ArrowLeft, ShoppingBag } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { addToCart, removeFromCart } from '../store/slices/cartSlice';
 import toast from 'react-hot-toast';
 import CartItem from '../components/cart/CartItem';
@@ -55,30 +56,40 @@ const Cart = () => {
 
   if (cartItems.length === 0) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
-        <div className="text-center bg-white p-12 rounded-2xl shadow-xl border border-blue-50 max-w-lg mx-auto">
-          <div className="mx-auto h-20 w-20 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-6">
+      <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 min-h-[70vh] flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+          className="text-center bg-brand-card-background p-10 md:p-12 rounded-brand-lg shadow-brand-soft border border-brand-border max-w-lg mx-auto"
+        >
+          <div className="mx-auto h-20 w-20 bg-brand-secondary text-brand-primary rounded-full flex items-center justify-center mb-6 shadow-inner">
             <ShoppingBag size={40} />
           </div>
-          <h2 className="text-3xl font-extrabold text-blue-950 mb-2">Your Cart is Empty</h2>
-          <p className="text-gray-500 mb-8">
+          <h2 className="text-3xl font-black text-brand-text-primary mb-2 tracking-tight">Your Cart is Empty</h2>
+          <p className="text-brand-text-secondary mb-8">
             Looks like you haven't added anything to your cart yet. Let's find some amazing treats and essentials for your pets!
           </p>
           <Link
             to="/shop"
-            className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-md hover:shadow-lg"
+            className="inline-flex items-center justify-center px-6 py-3 border.5 border-transparent text-base font-bold rounded-brand-md text-white bg-brand-primary hover:bg-brand-primary-hover transition-all shadow-md hover:shadow-lg cursor-pointer"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Go Shopping
           </Link>
-        </div>
+        </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-extrabold text-blue-950 mb-8">Shopping Cart</h1>
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 min-h-[80vh]"
+    >
+      <h1 className="text-3xl font-black text-brand-text-primary mb-8 tracking-tight">Shopping Cart</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Cart Items List */}
@@ -90,7 +101,7 @@ const Cart = () => {
           <div className="pt-4">
             <Link
               to="/shop"
-              className="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold transition-colors"
+              className="inline-flex items-center text-brand-primary hover:text-brand-primary-hover font-semibold transition-colors"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Continue Shopping
@@ -108,7 +119,7 @@ const Cart = () => {
           />
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

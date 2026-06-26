@@ -29,36 +29,36 @@ const CartItem = ({ item }) => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-white rounded-xl shadow-sm border border-blue-50/30">
+    <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-brand-card-background rounded-brand-lg shadow-brand-soft border border-brand-border">
       <img
         src={item.image || 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=200'}
         alt={item.name}
-        className="w-24 h-24 object-cover rounded-lg"
+        className="w-24 h-24 object-cover rounded-brand-md border border-brand-border"
       />
       <div className="flex-1 text-center sm:text-left">
-        <h3 className="font-semibold text-lg text-blue-950 hover:text-blue-600 transition-colors">
+        <h3 className="font-semibold text-lg text-brand-text-primary hover:text-brand-primary-hover transition-colors">
           {item.name}
         </h3>
-        <p className="text-sm text-gray-500 mt-1">PetNest Certified Item</p>
-        <p className="text-lg font-bold text-blue-900 mt-2">{formatPrice(item.price)}</p>
+        <p className="text-xs text-brand-text-secondary mt-1">PetNest Certified Item</p>
+        <p className="text-lg font-bold text-brand-primary mt-2">{formatPrice(item.price)}</p>
       </div>
 
       {/* Quantity Controls */}
-      <div className="flex items-center border border-gray-200 rounded-xl bg-gray-50/50 p-1">
+      <div className="flex items-center border border-brand-border rounded-brand-md bg-gray-50/50 p-1 shadow-inner">
         <button
           type="button"
           onClick={() => updateQty(qty - 1)}
-          className="p-2 hover:bg-white text-gray-600 rounded-lg transition-colors"
+          className="p-2 hover:bg-white text-brand-text-secondary hover:text-brand-text-primary rounded-brand-md transition-colors cursor-pointer"
         >
           <Minus size={16} />
         </button>
-        <span className="px-4 font-medium text-blue-950 w-8 text-center select-none">
+        <span className="px-4 font-bold text-brand-text-primary w-8 text-center select-none">
           {qty}
         </span>
         <button
           type="button"
           onClick={() => updateQty(qty + 1)}
-          className="p-2 hover:bg-white text-gray-600 rounded-lg transition-colors"
+          className="p-2 hover:bg-white text-brand-text-secondary hover:text-brand-text-primary rounded-brand-md transition-colors cursor-pointer"
         >
           <Plus size={16} />
         </button>
@@ -68,7 +68,7 @@ const CartItem = ({ item }) => {
       <button
         type="button"
         onClick={removeHandler}
-        className="p-3 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-xl transition-all"
+        className="p-3 text-brand-danger hover:text-white hover:bg-brand-danger rounded-brand-md transition-all cursor-pointer"
         title="Remove item"
       >
         <Trash2 size={20} />

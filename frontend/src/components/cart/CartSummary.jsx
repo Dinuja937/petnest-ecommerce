@@ -13,38 +13,37 @@ const CartSummary = ({ itemsPrice, shippingPrice, totalPrice, isLoading, onCheck
   };
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-md border border-blue-50 sticky top-24">
-      <h2 className="text-xl font-bold text-blue-950 border-b border-gray-100 pb-4 mb-4">
+    <div className="bg-brand-card-background p-6 rounded-brand-lg shadow-brand-soft border border-brand-border sticky top-24">
+      <h2 className="text-xl font-extrabold text-brand-text-primary border-b border-brand-border pb-4 mb-4 tracking-tight">
         Order Summary
       </h2>
 
-      <div className="space-y-3 pb-4 border-b border-gray-100">
-        <div className="flex justify-between text-gray-600">
+      <div className="space-y-3 pb-4 border-b border-brand-border">
+        <div className="flex justify-between text-brand-text-secondary font-medium text-sm">
           <span>Subtotal</span>
-          <span className="font-semibold text-blue-950">{formatPrice(itemsPrice)}</span>
+          <span className="font-bold text-brand-text-primary">{formatPrice(itemsPrice)}</span>
         </div>
-        <div className="flex justify-between text-gray-600">
+        <div className="flex justify-between text-brand-text-secondary font-medium text-sm">
           <span>Shipping</span>
-          <span className="font-semibold text-blue-950">
+          <span className="font-bold text-brand-text-primary">
             {shippingPrice === 0 ? (
-              <span className="text-green-600 font-medium">Free</span>
+              <span className="text-brand-success font-bold">Free</span>
             ) : (
               formatPrice(shippingPrice)
             )}
           </span>
         </div>
-
       </div>
 
-      <div className="flex justify-between text-lg font-bold text-blue-950 py-4 mb-4">
+      <div className="flex justify-between text-lg font-black text-brand-text-primary py-4 mb-4">
         <span>Total Price</span>
-        <span className="text-xl font-extrabold text-blue-900">{formatPrice(totalPrice)}</span>
+        <span className="text-2xl font-black text-brand-primary">{formatPrice(totalPrice)}</span>
       </div>
 
       <button
         onClick={handleCheckout}
         disabled={isLoading}
-        className={`w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+        className="w-full bg-brand-primary hover:bg-brand-primary-hover text-white font-bold py-3.5 px-4 rounded-brand-md transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
       >
         {isLoading ? (
           <RefreshCw className="animate-spin w-5 h-5" />
