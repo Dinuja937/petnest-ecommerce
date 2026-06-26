@@ -1,78 +1,99 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { ArrowRight, ShoppingBag } from 'lucide-react';
+import { motion } from 'framer-motion';
 import heroBg from '../../assets/banner.jpg';
+
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 28 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] },
+});
 
 const Hero = () => {
   return (
-    <section className="relative w-full h-[500px] md:h-[600px] lg:h-[700px] flex items-center justify-start overflow-hidden bg-blue-950">
-      {/* Background Image with Parallax-like fit */}
-      <div
-        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat scale-105 animate-zoom-in"
+    <section className="relative w-full h-[540px] md:h-[640px] lg:h-[720px] flex items-center justify-start overflow-hidden bg-blue-950">
+      {/* Background Image — slow Ken Burns zoom */}
+      <motion.div
+        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${heroBg})` }}
+        initial={{ scale: 1 }}
+        animate={{ scale: 1.06 }}
+        transition={{ duration: 16, ease: 'linear' }}
       />
 
-      {/* Premium Dark Gradient Overlay */}
-      <div className="absolute inset-0 bg-linear-to-r from-blue-950/90 via-blue-900/60 to-transparent" />
+      {/* Deep gradient overlay — left-heavy for text legibility */}
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-950/92 via-blue-950/65 to-blue-950/10" />
+      {/* Bottom fade into page */}
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white/5 to-transparent pointer-events-none" />
 
-      {/* Hero content container */}
-      <div className="relative max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 z-10 text-white animate-fade-in-up">
-        <div className="max-w-2xl space-y-6">
-          <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider text-blue-200 bg-blue-900/55 backdrop-blur-sm rounded-full border border-blue-700/50">
-            🐶 Your Premium Pet Partner
-          </span>
+      {/* Content */}
+      <div className="relative max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 z-10 text-white">
+        <div className="max-w-2xl space-y-7">
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
-            Welcome to <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-200 to-white">PetNest</span>
-          </h1>
+          {/* Eyebrow badge */}
+          <motion.span
+            {...fadeUp(0.1)}
+            className="inline-flex items-center gap-2 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-blue-200 bg-blue-900/60 backdrop-blur-sm rounded-full border border-blue-700/50"
+          >
+            <span>🐾</span> Sri Lanka&apos;s Premium Pet Store
+          </motion.span>
 
-          <p className="text-base sm:text-lg lg:text-xl text-blue-100/90 leading-relaxed font-light">
-            Your trusted online pet store for premium food, toys, accessories, and pet care essentials. Give your pets the love and quality they deserve.
-          </p>
+          {/* Main heading */}
+          <motion.h1
+            {...fadeUp(0.22)}
+            className="text-4xl sm:text-5xl lg:text-[3.75rem] font-extrabold tracking-tight leading-[1.1]"
+          >
+            Everything Your Pet{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-white">
+              Deserves
+            </span>
+          </motion.h1>
 
-          <div className="flex flex-wrap gap-4 pt-2">
+          {/* Sub-headline */}
+          <motion.p
+            {...fadeUp(0.34)}
+            className="text-base sm:text-lg lg:text-xl text-blue-100/85 leading-relaxed font-light max-w-xl"
+          >
+            Premium food, toys, accessories and care essentials — curated by pet lovers, delivered to your door.
+          </motion.p>
+
+          {/* CTA buttons */}
+          <motion.div {...fadeUp(0.46)} className="flex flex-wrap gap-4 pt-1">
             <Link
               to="/shop"
-              className="px-8 py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl shadow-lg shadow-blue-600/30 hover:shadow-blue-500/40 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2"
+              className="inline-flex items-center gap-2.5 px-8 py-3.5 bg-brand-primary hover:bg-brand-primary-hover text-white font-semibold rounded-brand-md shadow-lg shadow-blue-700/30 hover:shadow-blue-600/40 hover:scale-[1.03] active:scale-[0.98] transition-all duration-250"
             >
+              <ShoppingBag size={18} />
               Shop Now
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-              </svg>
+              <ArrowRight size={16} />
             </Link>
+            <Link
+              to="/about"
+              className="inline-flex items-center gap-2 px-8 py-3.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-brand-md border border-white/25 backdrop-blur-sm hover:scale-[1.03] active:scale-[0.98] transition-all duration-250"
+            >
+              Learn More
+            </Link>
+          </motion.div>
 
-          </div>
+          {/* Social proof stats */}
+          <motion.div
+            {...fadeUp(0.56)}
+            className="flex flex-wrap gap-6 pt-2"
+          >
+            {[
+              { value: '5,000+', label: 'Happy Customers' },
+              { value: '200+', label: 'Products' },
+              { value: '4.9★', label: 'Avg. Rating' },
+            ].map((stat) => (
+              <div key={stat.label} className="flex flex-col">
+                <span className="text-xl font-bold text-white">{stat.value}</span>
+                <span className="text-xs text-blue-300 font-medium uppercase tracking-wide">{stat.label}</span>
+              </div>
+            ))}
+          </motion.div>
         </div>
       </div>
-
-      <div className="absolute bottom-0 left-0 right-0 h-16 bg-linear-to-t from-blue-50/50 to-transparent pointer-events-none" />
-
-      {/* Tailwind & keyframe CSS injection */}
-      <style>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        @keyframes zoomIn {
-          from {
-            transform: scale(1);
-          }
-          to {
-            transform: scale(1.05);
-          }
-        }
-        .animate-fade-in-up {
-          animation: fadeInUp 0.8s ease-out forwards;
-        }
-        .animate-zoom-in {
-          animation: zoomIn 15s ease-out forwards;
-        }
-      `}</style>
     </section>
   );
 };
