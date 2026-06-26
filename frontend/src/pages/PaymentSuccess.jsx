@@ -5,6 +5,7 @@ import { clearCartItems } from '../store/slices/cartSlice';
 import api from '../services/api';
 import toast from 'react-hot-toast';
 import { CheckCircle, AlertCircle, ShoppingBag, ArrowRight, Loader2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const PaymentSuccess = () => {
     const [searchParams] = useSearchParams();
@@ -56,8 +57,13 @@ const PaymentSuccess = () => {
     }, [status, navigate]);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-[80vh] bg-linear-to-b from-blue-50/50 to-white px-4 py-12">
-            <div className="w-full max-w-lg bg-white rounded-3xl shadow-xl border border-blue-50/50 p-8 text-center transition-all duration-300 transform hover:shadow-2xl">
+        <div className="flex flex-col items-center justify-center min-h-[80vh] bg-linear-to-b from-brand-secondary/40 to-white px-4 py-12">
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4 }}
+                className="w-full max-w-lg bg-brand-card-background rounded-brand-lg shadow-brand-soft border border-brand-border p-8 text-center transition-all duration-300"
+            >
                 {status === 'verifying' && (
                     <div className="flex flex-col items-center py-6">
                         <div className="relative flex items-center justify-center mb-6">
@@ -66,10 +72,10 @@ const PaymentSuccess = () => {
                                 <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
                             </div>
                         </div>
-                        <h1 className="text-2xl font-extrabold text-blue-950 mb-2">
+                        <h1 className="text-2xl font-black text-brand-text-primary mb-2 tracking-tight">
                             Verifying your payment...
                         </h1>
-                        <p className="text-gray-500 text-sm max-w-sm">
+                        <p className="text-brand-text-secondary text-sm max-w-sm">
                             We are processing your payment with Stripe. Please do not close or refresh this page.
                         </p>
                     </div>
@@ -84,32 +90,32 @@ const PaymentSuccess = () => {
                             </div>
                         </div>
 
-                        <h1 className="text-3xl font-black bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-2">
+                        <h1 className="text-3xl font-black text-brand-primary mb-2 tracking-tight">
                             Payment Successful!
                         </h1>
 
-                        <p className="text-gray-600 font-medium mb-6">
+                        <p className="text-brand-text-secondary font-medium mb-6">
                             Thank you for your purchase. Your order has been placed successfully.
                         </p>
 
-                        <div className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-5 mb-8 text-left space-y-3">
-                            <div className="flex items-center gap-3 text-sm text-slate-700">
-                                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <div className="w-full bg-brand-secondary/45 border border-brand-border rounded-brand-md p-5 mb-8 text-left space-y-3">
+                            <div className="flex items-center gap-3 text-sm text-brand-text-primary">
+                                <span className="w-2 h-2 rounded-full bg-brand-success"></span>
                                 <span>Order processed successfully</span>
                             </div>
-                            <div className="flex items-center gap-3 text-sm text-slate-700">
-                                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <div className="flex items-center gap-3 text-sm text-brand-text-primary">
+                                <span className="w-2 h-2 rounded-full bg-brand-success"></span>
                                 <span>Order details sent to your profile</span>
                             </div>
-                            <div className="flex items-center gap-3 text-sm text-slate-700">
-                                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <div className="flex items-center gap-3 text-sm text-brand-text-primary">
+                                <span className="w-2 h-2 rounded-full bg-brand-success"></span>
                                 <span>Preparing shipment for dispatch</span>
                             </div>
                         </div>
 
-                        <div className="text-sm text-blue-950 font-semibold mb-6 flex items-center justify-center gap-1.5 bg-blue-50/50 px-4 py-2 rounded-full border border-blue-100/50">
+                        <div className="text-sm text-brand-text-primary font-semibold mb-6 flex items-center justify-center gap-1.5 bg-brand-secondary/45 px-4 py-2 rounded-full border border-brand-border">
                             <span>Redirecting to your profile in</span>
-                            <span className="inline-flex items-center justify-center bg-blue-600 text-white w-6 h-6 rounded-full font-bold text-xs">
+                            <span className="inline-flex items-center justify-center bg-brand-primary text-white w-6 h-6 rounded-full font-bold text-xs">
                                 {countdown}
                             </span>
                             <span>seconds...</span>
@@ -118,13 +124,13 @@ const PaymentSuccess = () => {
                         <div className="flex flex-col sm:flex-row gap-3 w-full">
                             <button
                                 onClick={() => navigate('/profile')}
-                                className="flex-1 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                                className="flex-1 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold py-3.5 px-6 rounded-brand-md transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer"
                             >
                                 View Orders <ArrowRight className="w-4 h-4" />
                             </button>
                             <button
                                 onClick={() => navigate('/shop')}
-                                className="flex-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold py-3.5 px-6 rounded-xl transition-all flex items-center justify-center gap-2"
+                                className="flex-1 bg-white hover:bg-gray-50 text-brand-text-secondary border border-brand-border font-bold py-3.5 px-6 rounded-brand-md transition-all flex items-center justify-center gap-2 cursor-pointer"
                             >
                                 <ShoppingBag className="w-4 h-4" /> Continue Shopping
                             </button>
@@ -141,31 +147,31 @@ const PaymentSuccess = () => {
                             </div>
                         </div>
 
-                        <h1 className="text-2xl font-extrabold text-rose-950 mb-2">
+                        <h1 className="text-2xl font-black text-brand-danger mb-2 tracking-tight">
                             Payment Verification Failed
                         </h1>
 
-                        <p className="text-gray-500 text-sm max-w-sm mb-8">
+                        <p className="text-brand-text-secondary text-sm max-w-sm mb-8">
                             {errorMessage || 'Something went wrong while confirming your payment with Stripe.'}
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-3 w-full">
                             <button
                                 onClick={() => navigate('/cart')}
-                                className="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
+                                className="flex-1 bg-brand-danger hover:bg-red-650 text-white font-bold py-3 px-6 rounded-brand-md transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
                             >
                                 Return to Cart
                             </button>
                             <button
                                 onClick={() => navigate('/contact')}
-                                className="flex-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-bold py-3 px-6 rounded-xl transition-all flex items-center justify-center gap-2"
+                                className="flex-1 bg-white hover:bg-gray-50 text-brand-text-secondary border border-brand-border font-bold py-3 px-6 rounded-brand-md transition-all flex items-center justify-center gap-2 cursor-pointer"
                             >
                                 Contact Support
                             </button>
                         </div>
                     </div>
                 )}
-            </div>
+            </motion.div>
         </div>
     );
 };
