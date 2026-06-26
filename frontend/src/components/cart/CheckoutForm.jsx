@@ -17,21 +17,22 @@ const CheckoutForm = ({
   return (
     <>
       {/* Shipping Address */}
-      <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-blue-50/50">
-        <h2 className="text-xl font-bold text-blue-950 mb-6 flex items-center gap-2">
-          <Truck className="text-blue-600 w-5 h-5" /> Shipping Details
+      <div className="bg-brand-card-background p-6 sm:p-8 rounded-brand-lg shadow-brand-soft border border-brand-border">
+        <h2 className="text-xl font-extrabold text-brand-text-primary mb-6 flex items-center gap-2 tracking-tight">
+          <Truck className="text-brand-primary w-5 h-5" /> Shipping Details
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Full Name */}
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700" htmlFor="fullName">
+            <label className="block text-sm font-semibold text-brand-text-primary" htmlFor="fullName">
               Full Name
             </label>
             <input
               id="fullName"
               type="text"
               required
-              className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              placeholder="John Doe"
+              className="mt-1 appearance-none block w-full px-4 py-3 border border-gray-300 placeholder-gray-400 text-brand-text-primary rounded-brand-md focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent sm:text-sm transition-all shadow-sm bg-gray-50/30 hover:bg-gray-50/60 focus:bg-white"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
             />
@@ -39,14 +40,15 @@ const CheckoutForm = ({
 
           {/* Phone */}
           <div>
-            <label className="block text-sm font-medium text-gray-700" htmlFor="phone">
+            <label className="block text-sm font-semibold text-brand-text-primary" htmlFor="phone">
               Phone
             </label>
             <input
               id="phone"
               type="tel"
               required
-              className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              placeholder="+94 77 123 4567"
+              className="mt-1 appearance-none block w-full px-4 py-3 border border-gray-300 placeholder-gray-400 text-brand-text-primary rounded-brand-md focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent sm:text-sm transition-all shadow-sm bg-gray-50/30 hover:bg-gray-50/60 focus:bg-white"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
@@ -54,14 +56,15 @@ const CheckoutForm = ({
 
           {/* Street Address */}
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700" htmlFor="address">
+            <label className="block text-sm font-semibold text-brand-text-primary" htmlFor="address">
               Street Address
             </label>
             <input
               id="address"
               type="text"
               required
-              className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              placeholder="123, Main Street"
+              className="mt-1 appearance-none block w-full px-4 py-3 border border-gray-300 placeholder-gray-400 text-brand-text-primary rounded-brand-md focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent sm:text-sm transition-all shadow-sm bg-gray-50/30 hover:bg-gray-50/60 focus:bg-white"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
             />
@@ -69,14 +72,15 @@ const CheckoutForm = ({
 
           {/* City */}
           <div>
-            <label className="block text-sm font-medium text-gray-700" htmlFor="city">
+            <label className="block text-sm font-semibold text-brand-text-primary" htmlFor="city">
               City
             </label>
             <input
               id="city"
               type="text"
               required
-              className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              placeholder="Colombo"
+              className="mt-1 appearance-none block w-full px-4 py-3 border border-gray-300 placeholder-gray-400 text-brand-text-primary rounded-brand-md focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent sm:text-sm transition-all shadow-sm bg-gray-50/30 hover:bg-gray-50/60 focus:bg-white"
               value={city}
               onChange={(e) => setCity(e.target.value)}
             />
@@ -84,14 +88,15 @@ const CheckoutForm = ({
 
           {/* Postal Code */}
           <div>
-            <label className="block text-sm font-medium text-gray-700" htmlFor="postalCode">
+            <label className="block text-sm font-semibold text-brand-text-primary" htmlFor="postalCode">
               Postal Code / ZIP
             </label>
             <input
               id="postalCode"
               type="text"
               required
-              className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              placeholder="00100"
+              className="mt-1 appearance-none block w-full px-4 py-3 border border-gray-300 placeholder-gray-400 text-brand-text-primary rounded-brand-md focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent sm:text-sm transition-all shadow-sm bg-gray-50/30 hover:bg-gray-50/60 focus:bg-white"
               value={postalCode}
               onChange={(e) => setPostalCode(e.target.value)}
             />
@@ -107,18 +112,18 @@ const CheckoutForm = ({
       </div>
 
       {/* Payment Method */}
-      <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-blue-50/50">
-        <h2 className="text-xl font-bold text-blue-950 mb-6 flex items-center gap-2">
-          <CreditCard className="text-blue-600 w-5 h-5" /> Payment Method
+      <div className="bg-brand-card-background p-6 sm:p-8 rounded-brand-lg shadow-brand-soft border border-brand-border">
+        <h2 className="text-xl font-extrabold text-brand-text-primary mb-6 flex items-center gap-2 tracking-tight">
+          <CreditCard className="text-brand-primary w-5 h-5" /> Payment Method
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {['Cash on Delivery', 'Card (Stripe)'].map((method) => (
             <label
               key={method}
-              className={`flex flex-col items-center justify-center p-4 border rounded-xl cursor-pointer transition-all ${
+              className={`flex flex-col items-center justify-center p-4 border rounded-brand-md cursor-pointer transition-all ${
                 paymentMethod === method
-                  ? 'border-blue-600 bg-blue-50/50 text-blue-950 font-semibold shadow-sm'
-                  : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                  ? 'border-brand-primary bg-brand-secondary text-brand-primary font-bold shadow-sm'
+                  : 'border-brand-border text-brand-text-secondary hover:bg-gray-50'
               }`}
             >
               <input
@@ -139,9 +144,7 @@ const CheckoutForm = ({
       <button
         disabled={isLoading}
         type="submit"
-        className={`w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 ${
-          isLoading ? 'opacity-70 cursor-not-allowed' : ''
-        }`}
+        className="w-full bg-brand-primary hover:bg-brand-primary-hover text-white font-bold py-3.5 px-4 rounded-brand-md transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
       >
         {isLoading ? 'Processing Order...' : 'Place Order'}
       </button>

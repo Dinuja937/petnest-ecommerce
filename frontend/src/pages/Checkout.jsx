@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { motion } from 'framer-motion';
 import { clearCartItems } from '../store/slices/cartSlice';
 import api from '../services/api';
 import toast from 'react-hot-toast';
@@ -114,13 +115,18 @@ const Checkout = () => {
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 min-h-screen"
+        >
             {isLoading && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/70 backdrop-blur-sm">
                     <LoadingSpinner />
                 </div>
             )}
-            <h1 className="text-3xl font-extrabold text-blue-950 mb-8">Checkout</h1>
+            <h1 className="text-3xl font-black text-brand-text-primary mb-8 tracking-tight">Checkout</h1>
 
             <form onSubmit={submitHandler} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 {/* ---------- LEFT SIDE ---------- */}
@@ -143,8 +149,8 @@ const Checkout = () => {
 
                 {/* ---------- RIGHT SIDE (Summary) ---------- */}
                 <div className="lg:col-span-4">
-                    <div className="bg-white p-6 rounded-2xl shadow-md border border-blue-50 sticky top-24">
-                        <h2 className="text-xl font-bold text-blue-950 border-b border-gray-100 pb-4 mb-4">
+                    <div className="bg-brand-card-background p-6 rounded-brand-lg shadow-brand-soft border border-brand-border sticky top-24">
+                        <h2 className="text-xl font-extrabold text-brand-text-primary border-b border-brand-border pb-4 mb-4 tracking-tight">
                             Checkout Summary
                         </h2>
 
@@ -153,10 +159,10 @@ const Checkout = () => {
                             {checkoutItems.map((item) => (
                                 <div key={item.product} className="flex justify-between items-center text-sm gap-2">
                                     <div className="flex items-center gap-2">
-                                        <span className="font-semibold text-blue-950">{item.qty || 1}x</span>
-                                        <span className="text-gray-600 truncate max-w-40">{item.name}</span>
+                                        <span className="font-bold text-brand-text-primary">{item.qty || 1}x</span>
+                                        <span className="text-brand-text-secondary truncate max-w-40">{item.name}</span>
                                     </div>
-                                    <span className="font-semibold text-blue-900">
+                                    <span className="font-bold text-brand-primary">
                                         Rs. {(item.price * (item.qty || 1)).toFixed(2)}
                                     </span>
                                 </div>
@@ -164,16 +170,16 @@ const Checkout = () => {
                         </div>
 
                         {/* Price Calculations */}
-                        <div className="space-y-3 pb-4 border-t border-b border-gray-100 pt-4 mb-4">
-                            <div className="flex justify-between text-gray-600">
+                        <div className="space-y-3 pb-4 border-t border-b border-brand-border pt-4 mb-4">
+                            <div className="flex justify-between text-brand-text-secondary font-medium">
                                 <span>Items Subtotal</span>
-                                <span className="font-semibold text-blue-950">Rs. {itemsPrice.toFixed(2)}</span>
+                                <span className="font-bold text-brand-text-primary">Rs. {itemsPrice.toFixed(2)}</span>
                             </div>
-                            <div className="flex justify-between text-gray-600">
+                            <div className="flex justify-between text-brand-text-secondary font-medium">
                                 <span>Shipping</span>
-                                <span className="font-semibold text-blue-950">
+                                <span className="font-bold text-brand-text-primary">
                                     {shippingPrice === 0 ? (
-                                        <span className="text-green-600 font-medium">Free</span>
+                                        <span className="text-brand-success font-bold">Free</span>
                                     ) : (
                                         `Rs. ${shippingPrice.toFixed(2)}`
                                     )}
@@ -181,14 +187,14 @@ const Checkout = () => {
                             </div>
                         </div>
 
-                        <div className="flex justify-between text-lg font-bold text-blue-950 mb-6">
+                        <div className="flex justify-between text-lg font-black text-brand-text-primary mb-6">
                             <span>Total Price</span>
-                            <span className="text-xl font-extrabold text-blue-900">Rs. {totalPrice.toFixed(2)}</span>
+                            <span className="text-xl font-black text-brand-primary">Rs. {totalPrice.toFixed(2)}</span>
                         </div>
                     </div>
                 </div>
             </form>
-        </div>
+        </motion.div>
     );
 };
 
