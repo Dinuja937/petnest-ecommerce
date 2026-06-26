@@ -3,6 +3,7 @@ import { Plus, Minus, Trash2 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, removeFromCart } from '../../store/slices/cartSlice';
 import toast from 'react-hot-toast';
+import { formatPrice } from '../../utils/priceUtils';
 
 const CartItem = ({ item }) => {
   const dispatch = useDispatch();
@@ -39,7 +40,7 @@ const CartItem = ({ item }) => {
           {item.name}
         </h3>
         <p className="text-sm text-gray-500 mt-1">PetNest Certified Item</p>
-        <p className="text-lg font-bold text-blue-900 mt-2">Rs. {item.price.toFixed(2)}</p>
+        <p className="text-lg font-bold text-blue-900 mt-2">{formatPrice(item.price)}</p>
       </div>
 
       {/* Quantity Controls */}

@@ -6,6 +6,7 @@ import { addToCart, removeFromCart } from '../store/slices/cartSlice';
 import toast from 'react-hot-toast';
 import CartItem from '../components/cart/CartItem';
 import CartSummary from '../components/cart/CartSummary';
+import { calculateShipping } from '../utils/priceUtils';
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -44,7 +45,7 @@ const Cart = () => {
   };
 
   const itemsPrice = cartItems.reduce((acc, item) => acc + item.price * (item.qty || 1), 0);
-  const shippingPrice = itemsPrice > 3000 || itemsPrice === 0 ? 0 : 299;
+  const shippingPrice = calculateShipping(cartItems);
 
   const totalPrice = itemsPrice + shippingPrice;
 

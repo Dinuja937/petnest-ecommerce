@@ -2,6 +2,7 @@ import React from 'react';
 import { ArrowRight, RefreshCw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { formatPrice } from '../../utils/priceUtils';
 
 const CartSummary = ({ itemsPrice, shippingPrice, totalPrice, isLoading, onCheckout }) => {
   const navigate = useNavigate();
@@ -19,8 +20,8 @@ const CartSummary = ({ itemsPrice, shippingPrice, totalPrice, isLoading, onCheck
 
       <div className="space-y-3 pb-4 border-b border-gray-100">
         <div className="flex justify-between text-gray-600">
-          <span>Subtotal ({itemsPrice ? itemsPrice.toFixed(2) : '0.00'} )</span>
-          <span className="font-semibold text-blue-950">Rs. {itemsPrice?.toFixed(2) || '0.00'}</span>
+          <span>Subtotal</span>
+          <span className="font-semibold text-blue-950">{formatPrice(itemsPrice)}</span>
         </div>
         <div className="flex justify-between text-gray-600">
           <span>Shipping</span>
@@ -28,7 +29,7 @@ const CartSummary = ({ itemsPrice, shippingPrice, totalPrice, isLoading, onCheck
             {shippingPrice === 0 ? (
               <span className="text-green-600 font-medium">Free</span>
             ) : (
-              `Rs. ${shippingPrice.toFixed(2)}`
+              formatPrice(shippingPrice)
             )}
           </span>
         </div>
@@ -37,7 +38,7 @@ const CartSummary = ({ itemsPrice, shippingPrice, totalPrice, isLoading, onCheck
 
       <div className="flex justify-between text-lg font-bold text-blue-950 py-4 mb-4">
         <span>Total Price</span>
-        <span className="text-xl font-extrabold text-blue-900">Rs. {totalPrice?.toFixed(2) || '0.00'}</span>
+        <span className="text-xl font-extrabold text-blue-900">{formatPrice(totalPrice)}</span>
       </div>
 
       <button
