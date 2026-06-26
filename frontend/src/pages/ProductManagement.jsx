@@ -10,9 +10,11 @@ import {
   Search,
   Trash2,
   X,
+  Package,
 } from 'lucide-react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const categories = ['Dogs', 'Cats', 'Birds'];
 
@@ -57,29 +59,26 @@ const ProductManagement = () => {
 
   useEffect(() => {
     if (!imageFile) return undefined;
-
     const previewUrl = URL.createObjectURL(imageFile);
     setImagePreview(previewUrl);
-
     return () => URL.revokeObjectURL(previewUrl);
   }, [imageFile]);
 
   const stats = useMemo(() => {
     const totalStock = products.reduce((sum, product) => sum + Number(product.stock || 0), 0);
-    const lowStock = products.filter((product) => Number(product.stock || 0) <= 5).length;
+    const lowStock = products.filter((product) => Number(product.stock || 0) <= 5 && Number(product.stock || 0) > 0).length;
     const outOfStock = products.filter((product) => Number(product.stock || 0) === 0).length;
 
     return [
-      { label: 'Total Products', value: products.length, icon: Boxes },
-      { label: 'Total Stock', value: totalStock, icon: PackageCheck },
-      { label: 'Low Stock', value: lowStock, icon: AlertTriangle },
-      { label: 'Out of Stock', value: outOfStock, icon: Trash2 },
+      { label: 'Total Products', value: products.length, icon: Boxes, bgClass: 'bg-blue-50 text-blue-700 border-blue-100' },
+      { label: 'Total Stock units', value: totalStock, icon: PackageCheck, bgClass: 'bg-green-50 text-green-700 border-green-100' },
+      { label: 'Low Stock warnings', value: lowStock, icon: AlertTriangle, bgClass: 'bg-amber-50 text-amber-700 border-amber-100' },
+      { label: 'Out of Stock items', value: outOfStock, icon: Trash2, bgClass: 'bg-red-50 text-red-700 border-red-100' },
     ];
   }, [products]);
 
   const filteredProducts = useMemo(() => {
     const search = searchTerm.trim().toLowerCase();
-
     return products.filter((product) => {
       const matchesCategory = categoryFilter === 'All' || product.category === categoryFilter;
       const matchesSearch =
@@ -87,7 +86,6 @@ const ProductManagement = () => {
         [product.name, product.category, product.description].some((value) =>
           value?.toLowerCase().includes(search)
         );
-
       return matchesCategory && matchesSearch;
     });
   }, [categoryFilter, products, searchTerm]);
@@ -128,7 +126,6 @@ const ProductManagement = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setFormData((current) => ({
       ...current,
       [name]: value,
@@ -138,7 +135,6 @@ const ProductManagement = () => {
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     setImageFile(file);
   };
 
@@ -149,13 +145,11 @@ const ProductManagement = () => {
     payload.append('price', Number(formData.price));
     payload.append('stock', Number(formData.stock));
     payload.append('description', formData.description.trim());
-
     if (imageFile) {
       payload.append('image', imageFile);
     } else {
       payload.append('image', formData.image.trim());
     }
-
     return payload;
   };
 
@@ -171,7 +165,6 @@ const ProductManagement = () => {
   const validateForm = () => {
     const price = Number(formData.price);
     const stock = Number(formData.stock);
-
     if (!formData.name.trim()) return 'Product name is required';
     if (!formData.description.trim()) return 'Description is required';
     if (!formData.image.trim() && !imageFile) return 'Product image is required';
@@ -182,7 +175,6 @@ const ProductManagement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const validationError = validateForm();
     if (validationError) {
       toast.error(validationError);
@@ -218,8 +210,7 @@ const ProductManagement = () => {
           ? 'Your admin session expired. Please log in again and create the product.'
           : err.response?.status === 403
             ? 'The server rejected this action. Please log out, log in again, and try creating the product.'
-          : err.response?.data?.message || err.message || 'Failed to save product';
-      console.error('Product save failed:', err.response?.data || err);
+            : err.response?.data?.message || err.message || 'Failed to save product';
       setSaveError(message);
       toast.error(message);
     } finally {
@@ -244,78 +235,90 @@ const ProductManagement = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-6">
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="max-w-7xl mx-auto space-y-6 pb-12"
+    >
+      {/* Header controls row */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-blue-950 flex items-center gap-3">
-            <Boxes className="w-8 h-8 text-blue-700" />
-            Product Management
+          <h1 className="text-3xl font-black text-brand-text-primary tracking-tight flex items-center gap-3">
+            <Boxes className="w-8 h-8 text-brand-primary" />
+            Inventory & Catalog
           </h1>
-          <p className="text-gray-600 mt-2">
-            Create products, update stock, manage categories, and keep the shop catalogue fresh.
+          <p className="text-brand-text-secondary text-sm mt-1">
+            Create products, update stock limits, and manage your online pet shop products.
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex gap-2">
           <button
             onClick={fetchProducts}
             disabled={loading}
-            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-100 text-blue-800 font-semibold hover:bg-blue-200 disabled:opacity-60 transition-colors"
+            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-brand-md bg-brand-secondary text-brand-primary font-bold border border-brand-border hover:border-brand-primary transition-all cursor-pointer disabled:opacity-60"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             Refresh
           </button>
           <button
             onClick={openCreateModal}
-            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-brand-md bg-brand-primary hover:bg-brand-primary-hover text-white font-bold transition-all shadow-md hover:shadow-lg cursor-pointer"
           >
-            <Plus className="w-4 h-4" />
-            Add Product
+            <Plus className="w-4.5 h-4.5" />
+            New Product
           </button>
         </div>
       </div>
 
-      <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-        {stats.map((stat) => (
-          <article key={stat.label} className="bg-white border border-blue-100 rounded-xl p-5 shadow-sm">
+      {/* Stats blocks */}
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {stats.map((stat, i) => (
+          <motion.article
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.05, duration: 0.3 }}
+            key={stat.label}
+            className="bg-brand-card-background border border-brand-border rounded-brand-lg p-5 shadow-brand-soft"
+          >
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-sm text-gray-500">{stat.label}</p>
-                <p className="text-3xl font-extrabold text-blue-950 mt-1">{stat.value}</p>
+                <p className="text-xs font-bold text-brand-text-secondary uppercase tracking-wider">{stat.label}</p>
+                <p className="text-3xl font-black text-brand-text-primary mt-1.5">{stat.value}</p>
               </div>
-              <div className="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
-                <stat.icon className="w-6 h-6" />
+              <div className={`w-12 h-12 rounded-brand-md flex items-center justify-center border ${stat.bgClass}`}>
+                <stat.icon className="w-5 h-5" />
               </div>
             </div>
-          </article>
+          </motion.article>
         ))}
       </section>
 
-      <section className="bg-white rounded-2xl border border-blue-100 shadow-sm overflow-hidden">
-        <div className="p-5 border-b border-blue-50 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+      {/* Table grid */}
+      <section className="bg-brand-card-background rounded-brand-lg border border-brand-border shadow-brand-soft overflow-hidden">
+        <div className="p-5 border-b border-brand-border flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <h2 className="text-xl font-bold text-blue-950">Product Catalogue</h2>
-            <p className="text-sm text-gray-500 mt-1">
-              Manage product details shown to customers in the shop.
-            </p>
+            <h2 className="text-lg font-black text-brand-text-primary tracking-tight">Products Catalog</h2>
+            <p className="text-xs text-brand-text-secondary mt-0.5">Filter category or search items</p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 w-full xl:w-auto">
+          <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
             <div className="relative w-full sm:w-80">
-              <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search products..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-blue-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none text-sm"
+                placeholder="Search by name, category..."
+                className="w-full pl-10 pr-4 py-2.5 rounded-brand-md border border-gray-300 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none text-xs text-brand-text-primary"
               />
             </div>
 
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="w-full sm:w-44 px-4 py-2.5 rounded-xl border border-blue-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none text-sm bg-white"
+              className="px-4 py-2.5 rounded-brand-md border border-gray-300 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none text-xs text-brand-text-primary bg-white cursor-pointer"
             >
               <option value="All">All Categories</option>
               {categories.map((category) => (
@@ -328,287 +331,311 @@ const ProductManagement = () => {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-blue-50">
-            <thead className="bg-blue-50/70">
+          <table className="min-w-full divide-y divide-brand-border">
+            <thead className="bg-gray-50/50">
               <tr>
-                <th className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wider text-blue-900">
-                  Product
+                <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-brand-text-secondary">
+                  Product details
                 </th>
-                <th className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wider text-blue-900">
+                <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-brand-text-secondary">
                   Category
                 </th>
-                <th className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wider text-blue-900">
-                  Price
+                <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-brand-text-secondary">
+                  Unit Price
                 </th>
-                <th className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wider text-blue-900">
-                  Stock
+                <th className="px-6 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-brand-text-secondary">
+                  Stock Units
                 </th>
-                <th className="px-5 py-3 text-right text-xs font-bold uppercase tracking-wider text-blue-900">
+                <th className="px-6 py-3.5 text-right text-xs font-bold uppercase tracking-wider text-brand-text-secondary">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-blue-50">
+            <tbody className="divide-y divide-brand-border bg-white">
               {loading ? (
                 <tr>
-                  <td colSpan="5" className="px-5 py-12 text-center text-gray-500">
-                    Loading products...
+                  <td colSpan="5" className="px-6 py-12 text-center text-brand-text-secondary font-medium">
+                    <div className="flex items-center justify-center gap-2">
+                      <RefreshCw className="animate-spin text-brand-primary w-5 h-5" />
+                      Loading inventory items...
+                    </div>
                   </td>
                 </tr>
               ) : filteredProducts.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="px-5 py-12 text-center text-gray-500">
+                  <td colSpan="5" className="px-6 py-12 text-center text-brand-text-secondary text-sm">
                     No products found.
                   </td>
                 </tr>
               ) : (
-                filteredProducts.map((product) => (
-                  <tr key={product._id} className="hover:bg-blue-50/40 transition-colors">
-                    <td className="px-5 py-4">
-                      <div className="flex items-center gap-3 min-w-72">
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="w-14 h-14 rounded-xl object-cover border border-blue-100 bg-blue-50"
-                        />
-                        <div>
-                          <p className="font-semibold text-blue-950">{product.name}</p>
-                          <p className="text-xs text-gray-500 line-clamp-1 max-w-sm">
-                            {product.description}
-                          </p>
+                filteredProducts.map((product) => {
+                  const isOutOfStock = Number(product.stock) === 0;
+                  const isLowStock = Number(product.stock) <= 5;
+                  
+                  const stockBadge = isOutOfStock
+                    ? 'bg-red-50 text-red-700 border-red-100'
+                    : isLowStock
+                    ? 'bg-amber-50 text-amber-700 border-amber-100 animate-pulse'
+                    : 'bg-green-50 text-green-700 border-green-100';
+
+                  const stockText = isOutOfStock
+                    ? 'Sold Out'
+                    : isLowStock
+                    ? `Low Stock (${product.stock})`
+                    : `${product.stock} in stock`;
+
+                  return (
+                    <tr key={product._id} className="hover:bg-gray-50/40 transition-colors">
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-4 min-w-[280px]">
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="w-12 h-12 rounded-brand-md object-cover border border-brand-border bg-gray-50 shrink-0"
+                          />
+                          <div className="min-w-0">
+                            <p className="font-bold text-brand-text-primary text-sm leading-snug truncate">{product.name}</p>
+                            <p className="text-xs text-brand-text-secondary truncate mt-0.5">
+                              {product.description}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td className="px-5 py-4">
-                      <span className="inline-flex rounded-full px-3 py-1 text-xs font-semibold bg-blue-100 text-blue-800">
-                        {product.category}
-                      </span>
-                    </td>
-                    <td className="px-5 py-4 text-sm font-semibold text-blue-950">
-                      Rs. {Number(product.price || 0).toFixed(2)}
-                    </td>
-                    <td className="px-5 py-4">
-                      <span
-                        className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
-                          Number(product.stock) === 0
-                            ? 'bg-red-100 text-red-800'
-                            : Number(product.stock) <= 5
-                              ? 'bg-yellow-100 text-yellow-800'
-                              : 'bg-green-100 text-green-800'
-                        }`}
-                      >
-                        {product.stock} in stock
-                      </span>
-                    </td>
-                    <td className="px-5 py-4">
-                      <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => openEditModal(product)}
-                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 text-sm font-semibold transition-colors"
-                        >
-                          <Edit3 className="w-4 h-4" />
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDelete(product)}
-                          disabled={deletingId === product._id}
-                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-red-50 text-red-700 hover:bg-red-100 text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                          {deletingId === product._id ? 'Deleting...' : 'Delete'}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="inline-flex rounded-full px-2.5 py-0.5 text-xs font-bold border border-brand-border bg-brand-secondary text-brand-primary">
+                          {product.category}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-sm font-black text-brand-text-primary">
+                        Rs. {Number(product.price || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-bold border ${stockBadge}`}>
+                          {stockText}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            onClick={() => openEditModal(product)}
+                            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-brand-md bg-brand-secondary text-brand-primary border border-transparent hover:border-brand-primary text-xs font-bold transition-all cursor-pointer"
+                          >
+                            <Edit3 className="w-3.5 h-3.5" />
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDelete(product)}
+                            disabled={deletingId === product._id}
+                            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-brand-md bg-brand-danger/10 text-brand-danger hover:bg-brand-danger hover:text-white text-xs font-bold transition-all disabled:opacity-50 cursor-pointer"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                            {deletingId === product._id ? 'Deleting...' : 'Delete'}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>
         </div>
       </section>
 
-      {modalMode && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center px-4 py-6 overflow-y-auto">
-          <div className="bg-white rounded-2xl shadow-xl border border-blue-100 w-full max-w-3xl overflow-hidden">
-            <div className="p-6 border-b border-blue-50 flex items-center justify-between gap-4">
-              <div>
-                <h2 className="text-xl font-bold text-blue-950">
-                  {modalMode === 'create' ? 'Add Product' : 'Edit Product'}
-                </h2>
-                <p className="text-sm text-gray-500 mt-1">
-                  Add accurate product details so customers can shop confidently.
-                </p>
+      {/* Edit modal overlay */}
+      <AnimatePresence>
+        {modalMode && (
+          <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+            <motion.div
+              initial={{ scale: 0.96, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.96, opacity: 0 }}
+              className="bg-brand-card-background rounded-brand-lg shadow-brand-soft border border-brand-border w-full max-w-3xl overflow-hidden"
+            >
+              <div className="p-6 border-b border-brand-border flex items-center justify-between">
+                <div>
+                  <h2 className="text-xl font-black text-brand-text-primary">
+                    {modalMode === 'create' ? 'Add New Product' : 'Modify Product details'}
+                  </h2>
+                  <p className="text-xs text-brand-text-secondary mt-0.5">Configure details and pricing catalog</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="w-9 h-9 rounded-brand-md bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 cursor-pointer"
+                  aria-label="Close modal"
+                >
+                  <X className="w-4.5 h-4.5" />
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={closeModal}
-                className="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600"
-                aria-label="Close product modal"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
 
-            <form onSubmit={handleSubmit} className="p-6 grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] gap-6">
-              <div className="space-y-4">
-                <div className="aspect-square rounded-2xl border border-blue-100 bg-blue-50 overflow-hidden flex items-center justify-center">
-                  {imagePreview || formData.image ? (
-                    <img
-                      src={imagePreview || formData.image}
-                      alt="Product preview"
-                      className="w-full h-full object-cover"
+              <form onSubmit={handleSubmit} className="p-6 grid grid-cols-1 md:grid-cols-12 gap-6 max-h-[80vh] overflow-y-auto">
+                {/* Left image column */}
+                <div className="md:col-span-5 space-y-4">
+                  <div className="aspect-square rounded-brand-lg border border-brand-border bg-gray-50/50 overflow-hidden flex items-center justify-center relative group">
+                    {imagePreview || formData.image ? (
+                      <img
+                        src={imagePreview || formData.image}
+                        alt="Product preview"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="text-center text-gray-400 p-6">
+                        <ImagePlus className="w-8 h-8 mx-auto mb-2 text-brand-primary" />
+                        <p className="text-xs font-bold text-brand-text-primary">No Image Selected</p>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label htmlFor="imageFile" className="text-xs font-bold uppercase tracking-wider text-brand-text-primary">
+                      Upload File
+                    </label>
+                    <input
+                      id="imageFile"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="w-full text-xs text-brand-text-secondary file:mr-3 file:rounded-brand-md file:border-0 file:bg-brand-secondary file:px-3 file:py-1.5 file:font-bold file:text-brand-primary hover:file:bg-brand-primary/10 file:cursor-pointer"
                     />
-                  ) : (
-                    <div className="text-center text-blue-900/50 p-6">
-                      <ImagePlus className="w-10 h-10 mx-auto mb-3" />
-                      <p className="text-sm font-semibold">Image preview</p>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label htmlFor="image" className="text-xs font-bold uppercase tracking-wider text-brand-text-primary">
+                      Or Image URL Link
+                    </label>
+                    <input
+                      id="image"
+                      name="image"
+                      type="url"
+                      value={formData.image}
+                      onChange={handleChange}
+                      placeholder="https://..."
+                      className="w-full px-3 py-2 rounded-brand-md border border-gray-300 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none text-xs"
+                    />
+                  </div>
+                </div>
+
+                {/* Right form input columns */}
+                <div className="md:col-span-7 space-y-4">
+                  <div className="space-y-1.5">
+                    <label htmlFor="name" className="text-xs font-bold uppercase tracking-wider text-brand-text-primary">
+                      Product Label
+                    </label>
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
+                      placeholder="e.g. Premium Dog Chow"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-2.5 rounded-brand-md border border-gray-300 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none text-xs text-brand-text-primary"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="space-y-1.5">
+                      <label htmlFor="category" className="text-xs font-bold uppercase tracking-wider text-brand-text-primary">
+                        Category
+                      </label>
+                      <select
+                        id="category"
+                        name="category"
+                        value={formData.category}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2.5 rounded-brand-md border border-gray-300 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none text-xs text-brand-text-primary bg-white cursor-pointer"
+                      >
+                        {categories.map((category) => (
+                          <option key={category} value={category}>
+                            {category}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label htmlFor="price" className="text-xs font-bold uppercase tracking-wider text-brand-text-primary">
+                        Price (Rs.)
+                      </label>
+                      <input
+                        id="price"
+                        name="price"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        placeholder="0.00"
+                        value={formData.price}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-3 py-2.5 rounded-brand-md border border-gray-300 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none text-xs text-brand-text-primary"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label htmlFor="stock" className="text-xs font-bold uppercase tracking-wider text-brand-text-primary">
+                        Stock Limit
+                      </label>
+                      <input
+                        id="stock"
+                        name="stock"
+                        type="number"
+                        min="0"
+                        step="1"
+                        placeholder="0"
+                        value={formData.stock}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-3 py-2.5 rounded-brand-md border border-gray-300 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none text-xs text-brand-text-primary"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label htmlFor="description" className="text-xs font-bold uppercase tracking-wider text-brand-text-primary">
+                      Product Description
+                    </label>
+                    <textarea
+                      id="description"
+                      name="description"
+                      rows={5}
+                      placeholder="Add details, size, guidelines..."
+                      value={formData.description}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-2.5 rounded-brand-md border border-gray-300 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 outline-none text-xs text-brand-text-primary resize-none"
+                    />
+                  </div>
+
+                  {saveError && (
+                    <div className="text-xs font-bold text-brand-danger bg-brand-danger/10 border border-brand-danger/20 rounded-brand-md px-4 py-3">
+                      {saveError}
                     </div>
                   )}
-                </div>
 
-                <div className="space-y-2">
-                  <label htmlFor="imageFile" className="text-sm font-semibold text-blue-950">
-                    Upload Image to Cloudinary
-                  </label>
-                  <input
-                    id="imageFile"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="w-full text-sm text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-blue-100 file:px-4 file:py-2 file:font-semibold file:text-blue-700 hover:file:bg-blue-200"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="image" className="text-sm font-semibold text-blue-950">
-                    Or Import Image URL
-                  </label>
-                  <input
-                    id="image"
-                    name="image"
-                    type="url"
-                    value={formData.image}
-                    onChange={handleChange}
-                    placeholder="https://..."
-                    className="w-full px-4 py-3 rounded-xl border border-blue-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none text-sm"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-5">
-                <div className="space-y-2">
-                  <label htmlFor="name" className="text-sm font-semibold text-blue-950">
-                    Product Name
-                  </label>
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 rounded-xl border border-blue-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none text-sm"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <label htmlFor="category" className="text-sm font-semibold text-blue-950">
-                      Category
-                    </label>
-                    <select
-                      id="category"
-                      name="category"
-                      value={formData.category}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-xl border border-blue-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none text-sm bg-white"
+                  <div className="flex gap-3 pt-3 justify-end">
+                    <button
+                      type="button"
+                      onClick={closeModal}
+                      className="px-5 py-3 rounded-brand-md bg-gray-100 hover:bg-gray-200 text-brand-text-primary font-bold text-xs cursor-pointer"
                     >
-                      {categories.map((category) => (
-                        <option key={category} value={category}>
-                          {category}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label htmlFor="price" className="text-sm font-semibold text-blue-950">
-                      Price
-                    </label>
-                    <input
-                      id="price"
-                      name="price"
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      value={formData.price}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 rounded-xl border border-blue-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none text-sm"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <label htmlFor="stock" className="text-sm font-semibold text-blue-950">
-                      Stock
-                    </label>
-                    <input
-                      id="stock"
-                      name="stock"
-                      type="number"
-                      min="0"
-                      step="1"
-                      value={formData.stock}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 rounded-xl border border-blue-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none text-sm"
-                    />
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={saving}
+                      className="px-5 py-3 rounded-brand-md bg-brand-primary hover:bg-brand-primary-hover text-white font-bold text-xs shadow-md hover:shadow-lg transition-all cursor-pointer disabled:opacity-50"
+                    >
+                      {saving ? 'Saving changes...' : modalMode === 'create' ? 'Create Product' : 'Save Changes'}
+                    </button>
                   </div>
                 </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="description" className="text-sm font-semibold text-blue-950">
-                    Description
-                  </label>
-                  <textarea
-                    id="description"
-                    name="description"
-                    rows={6}
-                    value={formData.description}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 rounded-xl border border-blue-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none text-sm resize-none"
-                  />
-                </div>
-
-                {saveError && (
-                  <p className="text-sm font-semibold text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-3">
-                    {saveError}
-                  </p>
-                )}
-
-                <div className="flex flex-col sm:flex-row justify-end gap-3 pt-2">
-                  <button
-                    type="button"
-                    onClick={closeModal}
-                    className="px-5 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold transition-colors"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={saving}
-                    className="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors disabled:opacity-60"
-                  >
-                    {saving ? 'Saving...' : modalMode === 'create' ? 'Create Product' : 'Save Changes'}
-                  </button>
-                </div>
-              </div>
-            </form>
+              </form>
+            </motion.div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 };
 
