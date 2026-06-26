@@ -4,8 +4,9 @@ import { useDispatch } from 'react-redux';
 import useAuth from '../hooks/useAuth';
 import useProduct from '../hooks/useProduct';
 import { addToCart } from '../store/slices/cartSlice';
-import { ShoppingCart, ArrowLeft, ShieldCheck, Heart, Info, RefreshCw } from 'lucide-react';
+import { ShoppingCart, ArrowLeft, ShieldCheck, Heart, Info, RefreshCw, Truck, Star } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { motion } from 'framer-motion';
 import { formatPrice } from '../utils/priceUtils';
 
 
@@ -50,18 +51,15 @@ const ProductDetails = () => {
       return;
     }
     if (!product) return;
-    // Navigate to checkout with the current product without modifying the cart
     navigate('/checkout', { state: { buyNowProduct: product } });
   };
-
-
 
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <RefreshCw className="animate-spin text-blue-600 w-10 h-10" />
-          <p className="text-gray-500 font-medium">Fetching details...</p>
+          <RefreshCw className="animate-spin text-brand-primary w-10 h-10" />
+          <p className="text-brand-text-secondary font-medium">Fetching product details...</p>
         </div>
       </div>
     );
@@ -69,20 +67,25 @@ const ProductDetails = () => {
 
   if (error || !product) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 min-h-screen">
-        <div className="text-center bg-white p-12 rounded-2xl shadow-xl border border-blue-50 max-w-lg mx-auto">
-          <div className="mx-auto h-20 w-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center mb-6">
+      <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+          className="text-center bg-brand-card-background p-12 rounded-brand-lg shadow-brand-soft border border-brand-border max-w-lg mx-auto"
+        >
+          <div className="mx-auto h-20 w-20 bg-brand-danger/10 text-brand-danger rounded-full flex items-center justify-center mb-6">
             <Info size={40} />
           </div>
-          <h2 className="text-2xl font-black text-blue-950 mb-2">Product Not Found</h2>
-          <p className="text-gray-500 mb-8">{error || 'The product you are looking for does not exist.'}</p>
+          <h2 className="text-2xl font-black text-brand-text-primary mb-2">Product Not Found</h2>
+          <p className="text-brand-text-secondary mb-8">{error || 'The product you are looking for does not exist.'}</p>
           <Link
             to="/shop"
-            className="inline-flex items-center justify-center px-6 py-3 text-base font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-md"
+            className="inline-flex items-center justify-center px-6 py-3 text-base font-bold rounded-brand-md text-white bg-brand-primary hover:bg-brand-primary-hover transition-all shadow-md cursor-pointer"
           >
             <ArrowLeft className="w-5 h-5 mr-2" /> Back to Shop
           </Link>
-        </div>
+        </motion.div>
       </div>
     );
   }
@@ -90,94 +93,113 @@ const ProductDetails = () => {
   const isOutOfStock = product.stock === 0;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 min-h-screen">
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 min-h-screen"
+    >
       {/* Breadcrumbs */}
-      <nav className="mb-6 flex items-center gap-2 text-sm text-gray-500">
-        <Link to="/" className="hover:text-blue-600 transition-colors">Home</Link>
-        <span>/</span>
-        <Link to="/shop" className="hover:text-blue-600 transition-colors">Shop</Link>
-        <span>/</span>
-        <Link to={`/category/${product.category?.toLowerCase()}`} className="hover:text-blue-600 transition-colors capitalize">
+      <nav className="mb-6 flex items-center gap-2 text-sm text-brand-text-secondary font-medium">
+        <Link to="/" className="hover:text-brand-primary transition-colors">Home</Link>
+        <span className="text-gray-300">/</span>
+        <Link to="/shop" className="hover:text-brand-primary transition-colors">Shop</Link>
+        <span className="text-gray-300">/</span>
+        <Link to={`/category/${product.category?.toLowerCase()}`} className="hover:text-brand-primary transition-colors capitalize">
           {product.category}
         </Link>
-        <span>/</span>
-        <span className="text-gray-900 font-medium truncate max-w-xs">{product.name}</span>
+        <span className="text-gray-300">/</span>
+        <span className="text-brand-text-primary font-semibold truncate max-w-xs">{product.name}</span>
       </nav>
 
-      {/* Product Split Grid */}
-      <div className="bg-white rounded-3xl shadow-xl border border-blue-50/60 overflow-hidden p-6 md:p-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      {/* Product Card */}
+      <div className="bg-brand-card-background rounded-brand-lg shadow-brand-soft border border-brand-border overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-12">
           {/* Left Column: Image */}
-          <div className="lg:col-span-6 flex items-center justify-center bg-gray-50/50 rounded-2xl p-4 overflow-hidden border border-blue-50/40">
+          <div className="lg:col-span-6 flex items-center justify-center bg-gray-50/70 p-8 md:p-12 border-b lg:border-b-0 lg:border-r border-brand-border min-h-80">
             <img
               src={product.image || 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=600'}
               alt={product.name}
-              className="w-full h-auto max-h-125 object-cover rounded-xl shadow-md hover:scale-102 transition-transform duration-300"
+              className="w-full h-auto max-h-[420px] object-contain rounded-brand-md hover:scale-[1.02] transition-transform duration-500"
             />
           </div>
 
-          {/* Right Column: Details Info */}
-          <div className="lg:col-span-6 flex flex-col justify-between">
-            <div>
-              {/* Category Tag */}
-              <span className="inline-block bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-blue-100 mb-4">
+          {/* Right Column: Details */}
+          <div className="lg:col-span-6 flex flex-col p-8 md:p-10">
+            {/* Category + Rating row */}
+            <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
+              <span className="inline-block bg-brand-secondary text-brand-primary text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-brand-border">
                 {product.category}
               </span>
-
-              {/* Title */}
-              <h1 className="text-3xl md:text-4xl font-extrabold text-blue-950 leading-tight">
-                {product.name}
-              </h1>
-
-              {/* Price */}
-              <div className="mt-4 flex items-baseline gap-2">
-                <span className="text-3xl font-black text-blue-900">{formatPrice(product.price)}</span>
-                <span className="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded font-semibold">PetNest Best Price</span>
-              </div>
-
-              {/* Stock status indicator */}
-              <div className="mt-4 flex items-center gap-2">
-                <span className="text-sm text-gray-500">Status:</span>
-                {isOutOfStock ? (
-                  <span className="text-sm font-bold text-red-600 bg-red-50 px-2.5 py-1 rounded-lg">Out of Stock</span>
-                ) : (
-                  <span className="text-sm font-bold text-green-700 bg-green-50 px-2.5 py-1 rounded-lg">
-                    In Stock ({product.stock} available)
-                  </span>
-                )}
-              </div>
-
-              {/* Description */}
-              <div className="mt-8 border-t border-gray-100 pt-6">
-                <h3 className="font-bold text-blue-950 text-base mb-2">Description</h3>
-                <p className="text-gray-600 leading-relaxed font-light text-sm md:text-base whitespace-pre-line">
-                  {product.description}
-                </p>
+              <div className="flex items-center gap-1 text-amber-400 text-sm">
+                {[1,2,3,4,5].map(s => <Star key={s} size={13} fill="currentColor" />)}
+                <span className="text-brand-text-secondary text-xs ml-1 font-medium">PetNest Verified</span>
               </div>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-gray-100 space-y-6">
-              {/* Quantity selector (Only if in stock) */}
+            {/* Title */}
+            <h1 className="text-3xl md:text-4xl font-black text-brand-text-primary leading-tight tracking-tight">
+              {product.name}
+            </h1>
+
+            {/* Price */}
+            <div className="mt-5 flex items-baseline gap-3">
+              <span className="text-3xl font-black text-brand-primary">{formatPrice(product.price)}</span>
+              <span className="text-xs text-brand-success bg-brand-success/10 px-2.5 py-1 rounded-full font-bold border border-brand-success/20">
+                Best Price
+              </span>
+            </div>
+
+            {/* Stock status */}
+            <div className="mt-4 flex items-center gap-2">
+              <span className="text-sm text-brand-text-secondary font-medium">Availability:</span>
+              {isOutOfStock ? (
+                <span className="text-sm font-bold text-brand-danger bg-brand-danger/10 px-3 py-1 rounded-full border border-brand-danger/20">
+                  Out of Stock
+                </span>
+              ) : (
+                <span className="text-sm font-bold text-brand-success bg-brand-success/10 px-3 py-1 rounded-full border border-brand-success/20">
+                  In Stock &mdash; {product.stock} units
+                </span>
+              )}
+            </div>
+
+            {/* Divider */}
+            <div className="my-6 border-t border-brand-border" />
+
+            {/* Description */}
+            <div>
+              <h3 className="font-bold text-brand-text-primary text-sm uppercase tracking-wide mb-3">Description</h3>
+              <p className="text-brand-text-secondary leading-relaxed text-sm md:text-base whitespace-pre-line">
+                {product.description}
+              </p>
+            </div>
+
+            {/* Divider */}
+            <div className="my-6 border-t border-brand-border" />
+
+            {/* Quantity + Actions */}
+            <div className="space-y-5">
               {!isOutOfStock && (
                 <div className="flex items-center gap-4">
-                  <span className="text-sm font-semibold text-blue-950">Quantity:</span>
-                  <div className="flex items-center border border-gray-200 rounded-xl bg-gray-50 p-1">
+                  <span className="text-sm font-semibold text-brand-text-primary">Quantity:</span>
+                  <div className="flex items-center border border-brand-border rounded-brand-md bg-gray-50 p-1 shadow-inner">
                     <button
                       type="button"
                       disabled={qty <= 1}
                       onClick={() => setQty(qty - 1)}
-                      className="w-10 h-10 flex items-center justify-center hover:bg-white text-gray-600 disabled:opacity-50 disabled:hover:bg-transparent rounded-lg transition-colors font-bold text-lg cursor-pointer"
+                      className="w-9 h-9 flex items-center justify-center hover:bg-white text-brand-text-secondary hover:text-brand-text-primary disabled:opacity-40 disabled:cursor-not-allowed rounded-brand-md transition-colors font-bold text-lg cursor-pointer"
                     >
                       &minus;
                     </button>
-                    <span className="w-12 text-center font-bold text-blue-950 select-none">
+                    <span className="w-12 text-center font-black text-brand-text-primary select-none text-base">
                       {qty}
                     </span>
                     <button
                       type="button"
                       disabled={qty >= product.stock}
                       onClick={() => setQty(qty + 1)}
-                      className="w-10 h-10 flex items-center justify-center hover:bg-white text-gray-600 disabled:opacity-50 disabled:hover:bg-transparent rounded-lg transition-colors font-bold text-lg cursor-pointer"
+                      className="w-9 h-9 flex items-center justify-center hover:bg-white text-brand-text-secondary hover:text-brand-text-primary disabled:opacity-40 disabled:cursor-not-allowed rounded-brand-md transition-colors font-bold text-lg cursor-pointer"
                     >
                       &#43;
                     </button>
@@ -186,14 +208,15 @@ const ProductDetails = () => {
               )}
 
               {/* Action buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   type="button"
                   disabled={isOutOfStock}
                   onClick={addToCartHandler}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed disabled:shadow-none cursor-pointer"
+                  aria-label={isOutOfStock ? 'Sold Out' : 'Add to Cart'}
+                  className="flex-1 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold py-3.5 px-6 rounded-brand-md transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed cursor-pointer"
                 >
-                  <ShoppingCart size={20} />
+                  <ShoppingCart size={18} />
                   {isOutOfStock ? 'Sold Out' : 'Add to Cart'}
                 </button>
 
@@ -201,37 +224,43 @@ const ProductDetails = () => {
                   type="button"
                   disabled={isOutOfStock}
                   onClick={buyNowHandler}
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed disabled:shadow-none cursor-pointer"
+                  aria-label="Proceed to Checkout"
+                  className="flex-1 bg-brand-text-primary hover:bg-brand-text-primary/90 text-white font-bold py-3.5 px-6 rounded-brand-md transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed cursor-pointer"
                 >
-                  <ShoppingCart size={20} />
-                  Proceed to Checkout
+                  <Truck size={18} />
+                  Buy Now
                 </button>
 
                 <button
                   type="button"
-                  className="px-5 py-4 border border-gray-200 hover:border-red-200 hover:bg-red-50 text-gray-500 hover:text-red-600 rounded-xl transition-all flex items-center justify-center"
+                  className="px-4 py-3.5 border border-brand-border hover:border-brand-danger hover:bg-brand-danger/5 text-brand-text-secondary hover:text-brand-danger rounded-brand-md transition-all flex items-center justify-center cursor-pointer"
                   title="Add to Wishlist"
+                  aria-label="Add to Wishlist"
                   onClick={() => toast.success('Added to wishlist!')}
                 >
-                  <Heart size={20} />
+                  <Heart size={18} />
                 </button>
-
               </div>
+            </div>
 
-              {/* Guarantees */}
-              <div className="flex flex-wrap gap-4 pt-2">
-                <div className="flex items-center gap-2 text-xs text-gray-500">
-                  <ShieldCheck className="text-green-600 w-4.5 h-4.5" /> Secure Checkout
-                </div>
-                <div className="flex items-center gap-2 text-xs text-gray-500">
-                  🐾 100% Pet-safe Products
-                </div>
+            {/* Trust badges */}
+            <div className="mt-6 pt-5 border-t border-brand-border flex flex-wrap gap-5">
+              <div className="flex items-center gap-2 text-xs text-brand-text-secondary font-medium">
+                <ShieldCheck className="text-brand-success w-4 h-4 shrink-0" />
+                Secure Checkout
+              </div>
+              <div className="flex items-center gap-2 text-xs text-brand-text-secondary font-medium">
+                <Truck className="text-brand-primary w-4 h-4 shrink-0" />
+                Nationwide Delivery
+              </div>
+              <div className="flex items-center gap-2 text-xs text-brand-text-secondary font-medium">
+                🐾 100% Pet-safe Products
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
