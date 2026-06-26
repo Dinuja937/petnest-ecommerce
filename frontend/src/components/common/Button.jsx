@@ -1,18 +1,37 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
-const Button = ({ onClick, disabled, isLoading, children, type = 'button', className = '' }) => {
+const Button = ({
+  onClick,
+  disabled,
+  isLoading,
+  children,
+  type = 'button',
+  variant = 'primary',
+  className = '',
+}) => {
+  const baseClasses = 'font-medium py-3 px-5 rounded-brand-md transition-colors flex items-center justify-center gap-2 cursor-pointer outline-none focus:ring-2 focus:ring-brand-primary/20 duration-200';
+  
+  const variantClasses = variant === 'secondary' 
+    ? 'bg-transparent border border-brand-primary text-brand-primary hover:bg-brand-secondary shadow-sm'
+    : 'bg-brand-primary hover:bg-brand-primary-hover text-white shadow-brand-soft border border-transparent';
+
+  const disabledClasses = 'disabled:bg-gray-100 disabled:text-gray-400 disabled:border-transparent disabled:cursor-not-allowed disabled:shadow-none';
+
   return (
-    <button
+    <motion.button
+      whileTap={{ scale: 0.98 }}
+      whileHover={(!disabled && !isLoading) ? { scale: 1.01 } : {}}
       type={type}
       disabled={disabled || isLoading}
       onClick={onClick}
-      className={`bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md hover:shadow-lg disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-2 cursor-pointer ${className}`}
+      className={`${baseClasses} ${variantClasses} ${disabledClasses} ${className}`}
     >
       {isLoading ? (
-        <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+        <span className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></span>
       ) : null}
       {children}
-    </button>
+    </motion.button>
   );
 };
 

@@ -83,11 +83,11 @@ const PaymentSuccess = () => {
                                 <CheckCircle className="w-12 h-12 text-emerald-500" />
                             </div>
                         </div>
-                        
+
                         <h1 className="text-3xl font-black bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-2">
                             Payment Successful!
                         </h1>
-                        
+
                         <p className="text-gray-600 font-medium mb-6">
                             Thank you for your purchase. Your order has been placed successfully.
                         </p>
@@ -144,7 +144,7 @@ const PaymentSuccess = () => {
                         <h1 className="text-2xl font-extrabold text-rose-950 mb-2">
                             Payment Verification Failed
                         </h1>
-                        
+
                         <p className="text-gray-500 text-sm max-w-sm mb-8">
                             {errorMessage || 'Something went wrong while confirming your payment with Stripe.'}
                         </p>
