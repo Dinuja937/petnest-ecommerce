@@ -37,31 +37,33 @@ const Footer = () => {
     ];
 
     return (
-        <footer className="bg-blue-950 text-blue-50 border-t border-blue-900">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <footer className="bg-blue-950 text-blue-100 border-t border-blue-900">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.25fr_0.8fr_1fr_0.8fr] gap-10">
-                    <div>
-                        <Link to="/" className="inline-block text-2xl font-bold tracking-tight mb-4">
-                            PetNest
+                    <div className="space-y-4">
+                        <Link to="/" className="inline-block text-2xl font-bold tracking-tight">
+                            <span className="text-white">Pet</span>
+                            <span className="text-brand-primary">Nest</span>
+                            <span className="text-brand-primary ml-0.5">🐾</span>
                         </Link>
-                        <p className="text-blue-200 text-sm leading-relaxed max-w-sm">
+                        <p className="text-blue-200/90 text-sm leading-relaxed max-w-sm">
                             Sri Lanka&apos;s friendly online pet store for food, treats, toys,
                             grooming essentials, accessories, and everyday pet care.
                         </p>
-                        <div className="mt-5 inline-flex items-center gap-2 rounded-xl bg-blue-900/70 border border-blue-800 px-4 py-3 text-sm text-blue-100">
+                        <div className="inline-flex items-center gap-2 rounded-brand-md bg-blue-900/60 border border-blue-800 px-4 py-3 text-sm text-blue-100">
                             <ShieldCheck className="w-4 h-4 text-blue-300 shrink-0" />
                             Trusted supplies for happier pets
                         </div>
                     </div>
 
                     <div>
-                        <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-                        <ul className="space-y-2">
+                        <h3 className="text-base font-bold text-white tracking-wide uppercase mb-5">Quick Links</h3>
+                        <ul className="space-y-3">
                             {quickLinks.map((link) => (
                                 <li key={link.name}>
                                     <Link
                                         to={link.path}
-                                        className="text-blue-200 hover:text-white text-sm transition-colors duration-300"
+                                        className="text-blue-200 hover:text-white text-sm transition-colors duration-250"
                                         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                                     >
                                         {link.name}
@@ -72,15 +74,15 @@ const Footer = () => {
                     </div>
 
                     <div>
-                        <h3 className="text-lg font-semibold mb-4">Contact</h3>
-                        <ul className="space-y-3">
+                        <h3 className="text-base font-bold text-white tracking-wide uppercase mb-5">Contact</h3>
+                        <ul className="space-y-4">
                             {contactInfo.map((item) => (
                                 <li key={item.text} className="flex items-start gap-3">
                                     <item.icon className="w-5 h-5 text-blue-300 mt-0.5 shrink-0" />
                                     {item.href ? (
                                         <a
                                             href={item.href}
-                                            className="text-blue-200 hover:text-white text-sm transition-colors duration-300"
+                                            className="text-blue-200 hover:text-white text-sm transition-colors duration-250"
                                         >
                                             {item.text}
                                         </a>
@@ -91,9 +93,9 @@ const Footer = () => {
                             ))}
                         </ul>
 
-                        <ul className="mt-5 space-y-2">
+                        <ul className="mt-6 space-y-2">
                             {supportPoints.map((point) => (
-                                <li key={point} className="text-blue-300 text-xs leading-relaxed">
+                                <li key={point} className="text-blue-300/80 text-xs leading-relaxed">
                                     {point}
                                 </li>
                             ))}
@@ -101,14 +103,14 @@ const Footer = () => {
                     </div>
 
                     <div>
-                        <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
+                        <h3 className="text-base font-bold text-white tracking-wide uppercase mb-5">Follow Us</h3>
                         <div className="flex gap-3">
                             {socialLinks.map((social) => (
                                 <a
                                     key={social.label}
                                     href={social.href}
                                     aria-label={social.label}
-                                    className="w-10 h-10 rounded-xl bg-blue-900 flex items-center justify-center text-blue-200 hover:text-white hover:bg-blue-700 hover:scale-105 transition-all duration-300"
+                                    className="w-10 h-10 rounded-brand-md bg-blue-900 flex items-center justify-center text-blue-200 hover:text-white hover:bg-brand-primary hover:scale-[1.05] transition-all duration-250 shadow-sm"
                                 >
                                     <social.icon className="w-5 h-5" />
                                 </a>
@@ -121,8 +123,8 @@ const Footer = () => {
                 </div>
             </div>
 
-            <div className="border-t border-blue-900">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+            <div className="border-t border-blue-900 bg-blue-950/40">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                     <p className="text-center text-blue-300 text-sm">
                         &copy; {new Date().getFullYear()} PetNest. All rights reserved.
                     </p>
