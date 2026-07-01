@@ -1,9 +1,13 @@
+import './config/env.js';
+
 import express from 'express';
-import dotenv from 'dotenv';
+
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import passport from 'passport';
 
 import connectDB from './config/db.js';
+import './config/passport.js';
 import authRoutes from './routes/authRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
@@ -12,8 +16,6 @@ import paymentRoutes from './routes/paymentRoutes.js';
 import { notFound, errorHandler } from './middlewares/errorMiddleware.js';
 
 const app = express();
-
-dotenv.config();
 
 connectDB();
 
@@ -40,6 +42,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
+app.use(passport.initialize());
 app.use('/uploads', express.static('uploads'));
 
 app.use('/api/auth', authRoutes);
