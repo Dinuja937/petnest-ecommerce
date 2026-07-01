@@ -446,3 +446,21 @@ export const verifyOtp = async (req, res) => {
   }
 };
 
+// @desc    OAuth Google callback handler - redirects to frontend with token
+// @route   GET /api/auth/google/callback
+// @access  Public
+export const authGoogleCallback = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Authentication failed' });
+    }
+
+    const token = generateToken(res, req.user._id);
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    
+    res.redirect(`${clientUrl}/oauth-success?token=${token}`);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+

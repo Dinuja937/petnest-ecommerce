@@ -1,4 +1,5 @@
 import express from 'express';
+import passport from 'passport';
 import {
     registerUser,
     authUser,
@@ -13,11 +14,18 @@ import {
     resetPassword,
     sendOtp,
     verifyOtp,
+    authGoogleCallback,
 } from '../controllers/authController.js';
 import { protect, admin } from '../middlewares/authMiddleware.js';
 import { registerValidation, loginValidation } from '../middlewares/validationMiddleware.js';
 
 const router = express.Router();
+
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/google/callback', (req, res, next) => {
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    passport.authenticate('google', { session: false, failureRedirect: `${clientUrl}/login` })(req, res, next);
+}, authGoogleCallback);
 
 router.post('/register', registerValidation, registerUser);
 router.post('/login', loginValidation, authUser);
