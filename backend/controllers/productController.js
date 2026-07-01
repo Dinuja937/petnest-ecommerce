@@ -1,5 +1,6 @@
 import Product from '../models/Product.js';
 import cloudinary from '../config/cloudinary.js';
+import { getCache, setCache, deleteCache } from '../utils/cache.js';
 import crypto from 'crypto';
 import fs from 'fs/promises';
 import path from 'path';
@@ -160,7 +161,20 @@ export const getProducts = async (req, res) => {
       ? { name: { $regex: req.query.keyword, $options: 'i' } }
       : {};
 
+    const cacheKey = req.query.keyword
+      ? `products:all:${req.query.keyword.toLowerCase()}`
+      : 'products:all';
+
+    // 1. Check Redis
+    const cached = await getCache(cacheKey);
+    if (cached) return res.json(cached);
+
+    // 2. Cache miss → hit MongoDB
     const products = await Product.find({ ...keyword }).sort({ createdAt: -1 });
+
+    // 3. Store in Redis for next time
+    await setCache(cacheKey, products);
+
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -172,9 +186,18 @@ export const getProducts = async (req, res) => {
 // @access  Public
 export const getProductById = async (req, res) => {
   try {
+    const cacheKey = `product:${req.params.id}`;
+
+    // 1. Check Redis
+    const cached = await getCache(cacheKey);
+    if (cached) return res.json(cached);
+
+    // 2. Cache miss → hit MongoDB
     const product = await Product.findById(req.params.id);
 
     if (product) {
+      // 3. Store in Redis
+      await setCache(cacheKey, product);
       res.json(product);
     } else {
       res.status(404).json({ message: 'Product not found' });
@@ -214,6 +237,7 @@ export const createProduct = async (req, res) => {
     });
 
     const createdProduct = await product.save();
+    await deleteCache('products:all');
     res.status(201).json(createdProduct);
   } catch (error) {
     
@@ -284,6 +308,7 @@ export const updateProduct = async (req, res) => {
       product.imagePublicId = imagePublicId;
 
       const updatedProduct = await product.save();
+      await deleteCache(['products:all', `product:${req.params.id}`]);
       res.json(updatedProduct);
     } else {
       res.status(404).json({ message: 'Product not found' });
@@ -313,6 +338,7 @@ export const deleteProduct = async (req, res) => {
       await deleteCloudinaryImage(product.imagePublicId);
       await deleteLocalImage(product.image);
       await product.deleteOne();
+      await deleteCache(['products:all', `product:${req.params.id}`]);
       res.json({ message: 'Product removed' });
     } else {
       res.status(404).json({ message: 'Product not found' });
