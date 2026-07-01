@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import passport from 'passport';
 
 import connectDB from './config/db.js';
+import connectRedis from './config/redis.js';
 import './config/passport.js';
 import authRoutes from './routes/authRoutes.js';
 import productRoutes from './routes/productRoutes.js';
@@ -18,6 +19,7 @@ import { notFound, errorHandler } from './middlewares/errorMiddleware.js';
 const app = express();
 
 connectDB();
+connectRedis();
 
 const allowedOrigins = [
     process.env.CLIENT_URL,
