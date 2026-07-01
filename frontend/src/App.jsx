@@ -3,6 +3,7 @@ import Layout from './components/layout/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import OAuthSuccess from './pages/OAuthSuccess';
 import ForgotPassword from './pages/ForgotPassword';
 import Profile from './pages/Profile';
 import Home from './pages/Home';
@@ -34,6 +35,7 @@ function App() {
           <Route path="contact" element={<Contact />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="oauth-success" element={<OAuthSuccess />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="shop" element={<ProductList />} />
           <Route path="category/:category" element={<ProductList />} />
