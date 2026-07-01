@@ -23,9 +23,9 @@ const Hero = () => {
       />
 
       {/* Deep gradient overlay — left-heavy for text legibility */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-950/92 via-blue-950/65 to-blue-950/10" />
+      <div className="absolute inset-0 bg-linear-to-r from-blue-950/92 via-blue-950/65 to-blue-950/10" />
       {/* Bottom fade into page */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white/5 to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-linear-to-t from-white/5 to-transparent pointer-events-none" />
 
       {/* Content */}
       <div className="relative max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 z-10 text-white">
@@ -45,7 +45,7 @@ const Hero = () => {
             className="text-4xl sm:text-5xl lg:text-[3.75rem] font-extrabold tracking-tight leading-[1.1]"
           >
             Everything Your Pet{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-white">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-300 to-white">
               Deserves
             </span>
           </motion.h1>

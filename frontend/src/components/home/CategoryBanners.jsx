@@ -77,7 +77,7 @@ const CategoryBanners = () => {
             >
               <Link
                 to={cat.link}
-                className="block relative aspect-[4/3] w-full overflow-hidden"
+                className="block relative aspect-4/3 w-full overflow-hidden"
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               >
                 {/* Image */}
@@ -89,7 +89,7 @@ const CategoryBanners = () => {
                 />
 
                 {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-blue-950/92 via-blue-900/45 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-blue-950/92 via-blue-900/45 to-transparent" />
 
                 {/* Top badge */}
                 <span className={`absolute top-4 left-4 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold text-white tracking-wide shadow-sm ${cat.badgeColor}`}>
